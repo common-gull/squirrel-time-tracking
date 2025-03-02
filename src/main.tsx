@@ -5,6 +5,7 @@ import App from './App.tsx';
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
 import '@mantine/notifications/styles.css';
+import 'mantine-react-table/styles.css';
 import { MantineProvider } from '@mantine/core';
 import { mantineTheme } from './theme.ts';
 import { Notifications } from '@mantine/notifications';
