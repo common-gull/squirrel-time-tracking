@@ -1,5 +1,5 @@
 {
-  "name": "worklog-tool",
+  "name": "squirrel-time-tracking",
   "homepage": "https://common-gull.github.io/squirrel-time-tracking",
   "private": true,
   "type": "module",
@@ -34,7 +34,7 @@
     "eslint-plugin-prettier": "^5.2.3",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.18",
-    "globals": "^15.14.0",
+    "globals": "^16.0.0",
     "postcss": "^8.5.2",
     "postcss-preset-mantine": "^1.17.0",
     "postcss-simple-vars": "^7.0.1",
