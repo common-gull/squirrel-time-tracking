@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc -b && ENVIRONMENT=prod vite build",
     "lint": "eslint .",
-    "preview": "vite build && vite preview"
+    "preview": "vite build && vite preview",
+    "test:playwright": "npx playwright test",
+    "test:playwright:ui": "npx playwright test --ui"
   },
   "dependencies": {
     "@mantine/core": "^7.16.3",
