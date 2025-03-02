@@ -1,6 +1,8 @@
-import { Today } from '../pages/today/Today.tsx';
-import { Settings } from '../pages/settings/Settings.tsx';
 import { IconHome2, IconSettings } from '@tabler/icons-react';
+import { lazy } from 'react';
+
+const Settings = lazy(() => import('../pages/settings/Settings'));
+const Today = lazy(() => import('../pages/today/Today'));
 
 export const routes = [
     {

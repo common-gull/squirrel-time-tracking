@@ -9,7 +9,7 @@ import { CreateTask } from '../../components/tasks/CreateTask.tsx';
 import { useEffect, useState } from 'react';
 import { TodoList } from '../../components/todos/TodoList.tsx';
 
-export function Today() {
+export default function Today() {
     const today = dayjs().format('YYYY-MM-DD');
     const tasks =
         useLiveQuery(() => db.tasks.where('start').aboveOrEqual(today).sortBy('start')) || [];

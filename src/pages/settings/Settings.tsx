@@ -2,7 +2,7 @@ import { Button, Card, Container, FileButton, Text, Title } from '@mantine/core'
 import { db } from '../../database/database.ts';
 import { notifications } from '@mantine/notifications';
 
-export function Settings() {
+export default function Settings() {
     function importData(file: File | null) {
         if (!file) {
             return;
