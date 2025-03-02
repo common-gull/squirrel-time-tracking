@@ -1,5 +1,6 @@
 {
   "name": "worklog-tool",
+  "homepage": "https://common-gull.github.io/squirrel-time-tracking",
   "private": true,
   "type": "module",
   "scripts": {
