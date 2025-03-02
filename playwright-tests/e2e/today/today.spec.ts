@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import * as todaySelectors from '../../selectors/today.selectors';
 import { addTask, addTodo } from '../../actions/today.actions';
 
-const baseURL = 'http://localhost:4173/#/';
+const startPath = '/#/';
 
 const todos = {
     updateProjectTimeline: 'Update Project Timeline',
@@ -16,7 +16,7 @@ const tasks = {
 };
 
 test('todos can be added and removed', async ({ page }) => {
-    await page.goto(baseURL);
+    await page.goto(startPath);
     await addTodo(todos.updateProjectTimeline, page);
     await addTodo(todos.emailFollowUps, page);
 
@@ -31,7 +31,7 @@ test('todos can be added and removed', async ({ page }) => {
 });
 
 test('todo is updated to completed state when complete button is clicked', async ({ page }) => {
-    await page.goto(baseURL);
+    await page.goto(startPath);
     await addTodo(todos.emailFollowUps, page);
 
     await expect(page.getByRole('button', { name: todaySelectors.todos.start })).toBeVisible();
@@ -46,7 +46,7 @@ test('todo is updated to completed state when complete button is clicked', async
 });
 
 test('task is created when start todo is clicked', async ({ page }) => {
-    await page.goto(baseURL);
+    await page.goto(startPath);
     await addTodo(todos.emailFollowUps, page);
 
     await page.getByRole('button', { name: todaySelectors.todos.start }).click();
@@ -56,7 +56,7 @@ test('task is created when start todo is clicked', async ({ page }) => {
 });
 
 test('current task is completed when a new task is added', async ({ page }) => {
-    await page.goto(baseURL);
+    await page.goto(startPath);
 
     await addTask(tasks.prepareForMeeting, page);
     await expect(
@@ -75,7 +75,7 @@ test('current task is completed when a new task is added', async ({ page }) => {
 });
 
 test('completed tasks are visible', async ({ page }) => {
-    await page.goto(baseURL);
+    await page.goto(startPath);
 
     await addTask(tasks.investigateNetworkConnectivity, page);
     await addTask(tasks.prepareForMeeting, page);
@@ -90,7 +90,7 @@ test('completed tasks are visible', async ({ page }) => {
 });
 
 test('completed task can be updated', async ({ page }) => {
-    await page.goto(baseURL);
+    await page.goto(startPath);
 
     const updatedTaskDesc = 'Important call';
 
@@ -124,7 +124,7 @@ test('completed task can be updated', async ({ page }) => {
 });
 
 test('completed tasks can be deleted', async ({ page }) => {
-    await page.goto(baseURL);
+    await page.goto(startPath);
 
     await addTask(tasks.investigateNetworkConnectivity, page);
     await page.locator('button').filter({ hasText: todaySelectors.tasks.complete }).click();
@@ -141,7 +141,7 @@ test('completed tasks can be deleted', async ({ page }) => {
 });
 
 test('tasks and todos are visible after reload', async ({ page }) => {
-    await page.goto(baseURL);
+    await page.goto(startPath);
 
     await addTodo(todos.emailFollowUps, page);
     await addTask(tasks.investigateNetworkConnectivity, page);
@@ -163,7 +163,7 @@ test('tasks and todos are visible after reload', async ({ page }) => {
 });
 
 test('task can be canceled and does not appear in completed', async ({ page }) => {
-    await page.goto(baseURL);
+    await page.goto(startPath);
 
     await addTask(tasks.investigateNetworkConnectivity, page);
     await page.locator('button').filter({ hasText: todaySelectors.tasks.cancel }).click();
