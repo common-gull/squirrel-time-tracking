@@ -26,7 +26,7 @@ export function CurrentTask({ cancel, complete, task }: Props) {
     }, [updateDuration]);
 
     return (
-        <Card p="xl" ta={'center'}>
+        <Card p="xl" ta={'center'} withBorder mt={'sm'}>
             <Text fz="lg" tt="uppercase" fw={700} c="dimmed">
                 Current Task
             </Text>

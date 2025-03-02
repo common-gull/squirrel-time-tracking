@@ -1,4 +1,4 @@
-import { Card, Input } from '@mantine/core';
+import { Input } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { db, Task } from '../../database/database.ts';
 
@@ -30,8 +30,7 @@ export function CreateTask({ onTaskCreated }: Props) {
     }
 
     return (
-        <Card>
-            Tasks
+        <>
             <form onSubmit={form.onSubmit((values) => createTask(values))}>
                 <Input
                     placeholder="What task are you focusing on right now?"
@@ -39,6 +38,6 @@ export function CreateTask({ onTaskCreated }: Props) {
                     {...form.getInputProps('task')}
                 />
             </form>
-        </Card>
+        </>
     );
 }

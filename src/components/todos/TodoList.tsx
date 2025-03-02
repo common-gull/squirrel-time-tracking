@@ -23,12 +23,11 @@ export function TodoList({ onTodoStart, todos }: Props) {
     }
 
     return (
-        <Card p={'xl'} style={{ overflowX: 'hidden' }}>
+        <>
             {todos.map((todo) => {
                 const isComplete = Boolean(todo.completedOn);
-
                 return (
-                    <Card mb={'sm'} key={todo.id} withBorder>
+                    <Card mt={'sm'} key={todo.id} withBorder>
                         <Group justify={'space-between'}>
                             <Text
                                 size={'xl'}
@@ -79,6 +78,6 @@ export function TodoList({ onTodoStart, todos }: Props) {
                     </Card>
                 );
             })}
-        </Card>
+        </>
     );
 }

@@ -1,4 +1,4 @@
-import { Card, Input } from '@mantine/core';
+import { Input } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { db } from '../../database/database.ts';
 
@@ -21,17 +21,14 @@ export function CreateTodo() {
     }
 
     return (
-        <div>
-            <Card>
-                Todos
-                <form onSubmit={form.onSubmit((values) => createTodo(values))}>
-                    <Input
-                        placeholder="What do you need to get done today?"
-                        key={form.key('todo')}
-                        {...form.getInputProps('todo')}
-                    />
-                </form>
-            </Card>
-        </div>
+        <>
+            <form onSubmit={form.onSubmit((values) => createTodo(values))}>
+                <Input
+                    placeholder="What do you need to get done today?"
+                    key={form.key('todo')}
+                    {...form.getInputProps('todo')}
+                />
+            </form>
+        </>
     );
 }

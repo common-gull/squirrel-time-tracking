@@ -1,4 +1,4 @@
-import { SimpleGrid, Stack } from '@mantine/core';
+import { Card, SimpleGrid, Text } from '@mantine/core';
 import { db, Task, Todo } from '../../database/database';
 import { CurrentTask } from '../../components/tasks/CurrentTask.tsx';
 import { TaskList } from '../../components/tasks/TaskList.tsx';
@@ -63,14 +63,20 @@ export function Today() {
         <div>
             <SimpleGrid cols={{ base: 1, sm: 1, lg: 2 }}>
                 <div>
-                    <Stack>
+                    <Card>
+                        <Text fw={500} size={'xl'}>
+                            Todos
+                        </Text>
                         <CreateTodo />
                         <TodoList onTodoStart={handleTodoStart} todos={todos} />
-                    </Stack>
+                    </Card>
                 </div>
 
                 <div>
-                    <Stack>
+                    <Card>
+                        <Text fw={500} size={'xl'}>
+                            Tasks
+                        </Text>
                         <CreateTask onTaskCreated={handleTaskCreated} />
                         {currentTask && (
                             <CurrentTask
@@ -80,7 +86,7 @@ export function Today() {
                             />
                         )}
                         <TaskList tasks={completedTasks} />
-                    </Stack>
+                    </Card>
                 </div>
             </SimpleGrid>
         </div>

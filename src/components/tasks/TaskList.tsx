@@ -28,12 +28,14 @@ export function TaskList({ tasks }: Props) {
     }
 
     return (
-        <Card p={'xl'} style={{ overflowX: 'hidden' }}>
+        <Card style={{ overflowX: 'hidden' }} withBorder mt={'sm'}>
+            <Text size={'l'}>Completed</Text>
+
             <Modal opened={opened} onClose={close} title={'Edit Task'}>
                 {currentTask && <EditTask close={close} task={currentTask} />}
             </Modal>
 
-            <Timeline active={tasks.length} bulletSize={36}>
+            <Timeline active={tasks.length} bulletSize={36} m={'xl'}>
                 {tasks.map((task) => {
                     const start = new Date(task.start);
                     const end = new Date(task.end || task.start);
