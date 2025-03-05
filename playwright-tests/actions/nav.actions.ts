@@ -8,3 +8,7 @@ export async function navigateToToday(page: Page) {
 export async function navigateToSettings(page: Page) {
     await page.getByRole('link', { name: selectors.links.settings }).click();
 }
+
+export async function navigateToTaskLog(page: Page) {
+    await page.getByRole('link', { name: selectors.links.taskLog }).click();
+}

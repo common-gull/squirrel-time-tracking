@@ -1,6 +1,7 @@
 import { Button, Card, Container, FileButton, Text, Title } from '@mantine/core';
 import { db } from '../../database/database.ts';
 import { notifications } from '@mantine/notifications';
+import { download } from '../../download/download.ts';
 
 export default function Settings() {
     function importData(file: File | null) {
@@ -32,14 +33,7 @@ export default function Settings() {
         const settings = {};
         const tasks = await db.tasks.toArray();
         const todos = await db.todos.toArray();
-
-        const jsonString = `data:application/json;charset=utf-8,${encodeURIComponent(
-            JSON.stringify({ settings, tasks, todos }),
-        )}`;
-        const link = document.createElement('a');
-        link.href = jsonString;
-        link.download = 'data.json';
-        link.click();
+        download(`squirrel-backup_${new Date().toISOString()}.json`, { settings, tasks, todos });
     }
 
     async function clearDb() {

@@ -2,21 +2,16 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { db, Task } from '../../database/database.ts';
 import {
     MantineReactTable,
-    useMantineReactTable,
     type MRT_ColumnDef,
     type MRT_Row,
+    useMantineReactTable,
 } from 'mantine-react-table';
 import { Button, Group } from '@mantine/core';
 import { IconDownload } from '@tabler/icons-react';
-import { mkConfig, generateCsv, download } from 'export-to-csv';
 import { isoStringToLocaleString } from '../../date/format.ts';
 import { calculateDuration } from '../../date/duration.ts';
-
-const csvConfig = mkConfig({
-    fieldSeparator: ',',
-    decimalSeparator: '.',
-    useKeysAsHeaders: true,
-});
+import { download } from '../../download/download.ts';
+import Papa from 'papaparse';
 
 interface FormattedTask extends Task, Record<string, string | number | undefined> {
     duration: string;
@@ -60,8 +55,12 @@ export default function TaskLog() {
 
     const handleExportRows = (rows: MRT_Row<FormattedTask>[]) => {
         const rowData = rows.map((row) => row.original);
-        const csv = generateCsv(csvConfig)(rowData);
-        download(csvConfig)(csv);
+        const csv = Papa.unparse(rowData, {
+            header: true,
+            newline: '\n',
+            skipEmptyLines: true,
+        });
+        download(`squirrel-export_${new Date().toISOString()}.csv`, csv);
     };
 
     const table = useMantineReactTable({
