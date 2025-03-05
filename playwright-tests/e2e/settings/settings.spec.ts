@@ -6,6 +6,7 @@ import * as settingsSelectors from '../../selectors/settings.selectors';
 import { join } from 'path';
 import { tmpdir } from 'os';
 import { readFile } from 'fs/promises';
+import { restoreFromFile } from '../../actions/settings.actions';
 
 const startPath = '/#/settings';
 
@@ -128,12 +129,7 @@ test('Restore from file restores tasks and todos', async ({ page }) => {
     await navigateToToday(page);
     await checkTaskAndTodosDoNotExist(page);
 
-    await navigateToSettings(page);
-
-    const fileChooserPromise = page.waitForEvent('filechooser');
-    await page.getByRole('button', { name: settingsSelectors.main.restoreFromFile }).click();
-    const fileChooser = await fileChooserPromise;
-    await fileChooser.setFiles(downloadPath);
+    await restoreFromFile(downloadPath, page);
 
     await navigateToToday(page);
     await checkTaskAndTodosExist(page);

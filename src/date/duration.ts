@@ -1,10 +1,17 @@
-import { intervalToDuration } from 'date-fns';
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
+dayjs.extend(duration);
 
-function formatDurationUnit(unit?: number) {
-    return (unit || 0).toString().padStart(2, '0');
-}
+export function calculateDuration(startDate: string, endDate?: string) {
+    const start = dayjs(startDate);
+    const end = dayjs(endDate);
 
-export function getDurationString(start: Date, end: Date) {
-    const { hours, minutes, seconds } = intervalToDuration({ start, end });
-    return `${formatDurationUnit(hours)}:${formatDurationUnit(minutes)}:${formatDurationUnit(seconds)}`;
+    const diff = end.diff(start);
+    const dur = dayjs.duration(diff);
+
+    const hours = String(dur.hours()).padStart(2, '0');
+    const minutes = String(dur.minutes()).padStart(2, '0');
+    const seconds = String(dur.seconds()).padStart(2, '0');
+
+    return `${hours}:${minutes}:${seconds}`;
 }

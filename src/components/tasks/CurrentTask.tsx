@@ -1,7 +1,7 @@
 import { Task } from '../../database/database.ts';
 import { Button, Card, Group, Text } from '@mantine/core';
 import { useCallback, useEffect, useState } from 'react';
-import { getDurationString } from '../../date/duration.ts';
+import { calculateDuration } from '../../date/duration.ts';
 import { isoStringToLocaleTimeString } from '../../date/format.ts';
 
 interface Props {
@@ -14,7 +14,7 @@ export function CurrentTask({ cancel, complete, task }: Props) {
     const [duration, setDuration] = useState<string>('');
 
     const updateDuration = useCallback(() => {
-        setDuration(getDurationString(new Date(task.start), new Date()));
+        setDuration(calculateDuration(task.start));
     }, [task.start]);
 
     useEffect(() => {
