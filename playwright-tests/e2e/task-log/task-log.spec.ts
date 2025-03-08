@@ -7,6 +7,7 @@ import * as selectors from '../../selectors/task.log.selectors';
 import { join } from 'path';
 import { tmpdir } from 'os';
 import { readFile } from 'fs/promises';
+import * as todaySelectors from '../../selectors/today.selectors';
 
 const startPath = '/#/task-log';
 // @ts-expect-error dnm
@@ -75,5 +76,24 @@ test('Clicking Export Select Rows downloads CSV data', async ({ page }) => {
     expect(fileData).toBe(
         'name,start,id,end,duration\n' +
             'Investigate network connectivity issues,"2/22/2025, 1:22:59 PM",1,"2/22/2025, 1:23:04 PM",00:00:05',
+    );
+});
+
+test('Rows can be edited', async ({ page }) => {
+    const updatedTaskDesc = 'Looked into connectivity issues';
+    await setup(page);
+    await page.getByRole('button', { name: selectors.table.edit }).first().click();
+    await page
+        .getByRole('textbox', { name: todaySelectors.tasks.editTask.name })
+        .fill(updatedTaskDesc);
+    await page.getByRole('button', { name: todaySelectors.tasks.editTask.update }).click();
+
+    await page.getByLabel(selectors.table.toggleSelectRow).first().click();
+    const downloadPath = await exportData(selectors.table.exportSelectedRows, page);
+    const fileData = await readExport(downloadPath);
+
+    expect(fileData).toBe(
+        'name,start,id,end,duration\n' +
+            `${updatedTaskDesc},"2/22/2025, 1:22:59 PM",1,"2/22/2025, 1:23:04 PM",00:00:05`,
     );
 });

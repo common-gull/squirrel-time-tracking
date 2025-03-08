@@ -1,17 +1,18 @@
 import Dexie, { type EntityTable } from 'dexie';
 
 interface Task {
+    end?: string;
     id: number;
     name: string;
+    project?: string;
     start: string;
-    end?: string;
 }
 
 interface Todo {
+    completedOn?: string;
+    createdOn: string;
     id: number;
     name: string;
-    createdOn: string;
-    completedOn?: string;
 }
 
 const db = new Dexie('SquirrelDB') as Dexie & {
@@ -20,7 +21,7 @@ const db = new Dexie('SquirrelDB') as Dexie & {
 };
 
 db.version(1).stores({
-    tasks: '++id, name, start, end',
+    tasks: '++id, name, start, end, project',
     todos: '++id, name, completedOn, createdOn',
 });
 

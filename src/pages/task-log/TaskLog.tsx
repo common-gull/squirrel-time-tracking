@@ -6,12 +6,13 @@ import {
     type MRT_Row,
     useMantineReactTable,
 } from 'mantine-react-table';
-import { Button, Group } from '@mantine/core';
+import { Button, Group, Stack, Title } from '@mantine/core';
 import { IconDownload } from '@tabler/icons-react';
 import { isoStringToLocaleString } from '../../date/format.ts';
 import { calculateDuration } from '../../date/duration.ts';
 import { download } from '../../download/download.ts';
 import Papa from 'papaparse';
+import { EditTask } from '../../components/tasks/EditTask.tsx';
 
 interface FormattedTask extends Task, Record<string, string | number | undefined> {
     duration: string;
@@ -19,8 +20,18 @@ interface FormattedTask extends Task, Record<string, string | number | undefined
 
 const columns: MRT_ColumnDef<FormattedTask>[] = [
     {
+        accessorKey: 'id',
+        header: 'ID',
+        enableHiding: false,
+        enableEditing: false,
+    },
+    {
         accessorKey: 'name',
         header: 'Name',
+    },
+    {
+        accessorKey: 'project',
+        header: 'Project',
     },
     {
         accessorKey: 'start',
@@ -33,6 +44,7 @@ const columns: MRT_ColumnDef<FormattedTask>[] = [
     {
         accessorKey: 'duration',
         header: 'Duration',
+        enableEditing: false,
     },
 ];
 
@@ -67,7 +79,34 @@ export default function TaskLog() {
         columns,
         data: tasks,
         enableRowSelection: true,
+        enableEditing: true,
+        initialState: {
+            columnVisibility: {
+                id: false,
+            },
+        },
+        positionActionsColumn: 'last',
         positionToolbarAlertBanner: 'bottom',
+        mantinePaginationProps: {
+            rowsPerPageOptions: ['10', '20', '50'],
+            withEdges: true,
+        },
+        enableFilterMatchHighlighting: false,
+        renderEditRowModalContent: ({ row, table }) => (
+            <Stack>
+                <Title order={5}>Edit Task</Title>
+                <EditTask
+                    close={() => table.setEditingRow(null)}
+                    task={{
+                        id: row.getValue('id'),
+                        name: row.getValue('name'),
+                        start: row.getValue('start'),
+                        end: row.getValue('end'),
+                        project: row.getValue('project'),
+                    }}
+                />
+            </Stack>
+        ),
         renderTopToolbarCustomActions: ({ table }) => (
             <Group>
                 <Button
