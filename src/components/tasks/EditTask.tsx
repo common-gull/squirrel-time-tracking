@@ -15,6 +15,7 @@ export function EditTask({ close, task }: Props) {
             name: task.name,
             start: new Date(task.start),
             end: task.end && new Date(task.end),
+            project: task.project,
         },
         validate: {
             name: (value) => (value.length < 2 ? 'Name must have at least 2 letters' : null),
@@ -28,14 +29,17 @@ export function EditTask({ close, task }: Props) {
         }
     }
 
-    async function updateTask(values: { name: string; start: Date; end: '' | Date | undefined }) {
+    async function updateTask(values: typeof form.values) {
         await db.tasks.update(task.id, {
             name: values.name,
             start: values.start && values.start.toISOString(),
             end: values.end && values.end.toISOString(),
+            project: values.project,
         });
         close();
     }
+
+    const dateFormat = 'M/D/YYYY h:mm:ss A';
 
     return (
         <>
@@ -49,30 +53,45 @@ export function EditTask({ close, task }: Props) {
                     mb={'sm'}
                 />
 
+                <TextInput
+                    label="Project"
+                    placeholder="Project A"
+                    key={form.key('project')}
+                    {...form.getInputProps('project')}
+                    mb={'sm'}
+                />
+
                 <DateTimePicker
+                    dropdownType="modal"
                     withAsterisk
                     label="Start"
-                    valueFormat="DD MMM YYYY hh:mm A"
+                    valueFormat={dateFormat}
                     key={form.key('start')}
                     {...form.getInputProps('start')}
                     mb={'sm'}
                 />
 
                 <DateTimePicker
+                    dropdownType="modal"
                     withAsterisk
                     label="End"
-                    valueFormat="DD MMM YYYY hh:mm A"
+                    valueFormat={dateFormat}
                     key={form.key('end')}
                     {...form.getInputProps('end')}
                 />
 
-                <Group justify="flex-end" mt="md">
-                    <Button onClick={() => deleteTask(task.id)} variant={'subtle'}>
+                <Group justify="space-between" mt="md">
+                    <Button onClick={() => deleteTask(task.id)} variant={'subtle'} color={'red'}>
                         Delete
                     </Button>
-                    <Button disabled={!form.isDirty()} type="submit">
-                        Update
-                    </Button>
+                    <Group>
+                        <Button variant={'subtle'} onClick={close}>
+                            Cancel
+                        </Button>
+                        <Button disabled={!form.isDirty()} type="submit">
+                            Update
+                        </Button>
+                    </Group>
                 </Group>
             </form>
         </>
