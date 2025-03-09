@@ -1,14 +1,5 @@
 import { Page } from '@playwright/test';
-import * as selectors from '../selectors/nav.selectors';
 
-export async function navigateToToday(page: Page) {
-    await page.getByRole('link', { name: selectors.links.today }).click();
-}
-
-export async function navigateToSettings(page: Page) {
-    await page.getByRole('link', { name: selectors.links.settings }).click();
-}
-
-export async function navigateToTaskLog(page: Page) {
-    await page.getByRole('link', { name: selectors.links.taskLog }).click();
+export async function navigateTo(page: Page, link: string) {
+    await page.getByRole('link', { name: link }).click();
 }

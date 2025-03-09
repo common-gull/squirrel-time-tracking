@@ -1,12 +1,13 @@
 import { test, expect, Page } from '@playwright/test';
 import { addTask, addTodo } from '../../actions/today.actions';
-import { navigateToSettings, navigateToToday } from '../../actions/nav.actions';
+import { navigateTo } from '../../actions/nav.actions';
 import * as todaySelectors from '../../selectors/today.selectors';
 import * as settingsSelectors from '../../selectors/settings.selectors';
 import { join } from 'path';
 import { tmpdir } from 'os';
 import { readFile } from 'fs/promises';
 import { restoreFromFile } from '../../actions/settings.actions';
+import { links } from '../../selectors/nav.selectors';
 
 const startPath = '/#/settings';
 
@@ -24,7 +25,7 @@ const tasks = {
 // TODO - Look into using fixtures
 async function setup(page: Page) {
     await page.goto(startPath);
-    await navigateToToday(page);
+    await navigateTo(page, links.today);
 
     await addTodo(todos.updateProjectTimeline, page);
     await addTodo(todos.emailFollowUps, page);
@@ -33,7 +34,7 @@ async function setup(page: Page) {
     await addTask(tasks.respondToClientRequest, page);
     await checkTaskAndTodosExist(page);
 
-    await navigateToSettings(page);
+    await navigateTo(page, links.settings);
 }
 
 async function checkTaskAndTodosExist(page: Page) {
@@ -64,7 +65,7 @@ test('Delete all data removes all todos and tasks when clicked', async ({ page }
     await setup(page);
     await page.getByRole('button', { name: settingsSelectors.main.deleteAllData }).click();
     await expect(page.getByRole('alert')).toBeVisible();
-    await navigateToToday(page);
+    await navigateTo(page, links.today);
     await checkTaskAndTodosDoNotExist(page);
 });
 
@@ -126,11 +127,11 @@ test('Restore from file restores tasks and todos', async ({ page }) => {
     await download.saveAs(downloadPath);
 
     await page.getByRole('button', { name: settingsSelectors.main.deleteAllData }).click();
-    await navigateToToday(page);
+    await navigateTo(page, links.today);
     await checkTaskAndTodosDoNotExist(page);
 
     await restoreFromFile(downloadPath, page);
 
-    await navigateToToday(page);
+    await navigateTo(page, links.today);
     await checkTaskAndTodosExist(page);
 });
