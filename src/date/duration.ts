@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import duration from 'dayjs/plugin/duration';
+import duration, { Duration } from 'dayjs/plugin/duration';
 dayjs.extend(duration);
 
 export function calculateDuration(startDate: string, endDate?: string) {
@@ -7,11 +7,13 @@ export function calculateDuration(startDate: string, endDate?: string) {
     const end = dayjs(endDate);
 
     const diff = end.diff(start);
-    const dur = dayjs.duration(diff);
+    return dayjs.duration(diff);
+}
 
-    const hours = String(dur.hours()).padStart(2, '0');
-    const minutes = String(dur.minutes()).padStart(2, '0');
-    const seconds = String(dur.seconds()).padStart(2, '0');
+export function formatDuration(duration: Duration) {
+    const hours = String(duration.hours()).padStart(2, '0');
+    const minutes = String(duration.minutes()).padStart(2, '0');
+    const seconds = String(duration.seconds()).padStart(2, '0');
 
     return `${hours}:${minutes}:${seconds}`;
 }

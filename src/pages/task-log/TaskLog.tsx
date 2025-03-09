@@ -9,7 +9,7 @@ import {
 import { Button, Group, Stack, Title } from '@mantine/core';
 import { IconDownload } from '@tabler/icons-react';
 import { isoStringToLocaleString } from '../../date/format.ts';
-import { calculateDuration } from '../../date/duration.ts';
+import { calculateDuration, formatDuration } from '../../date/duration.ts';
 import { download } from '../../download/download.ts';
 import Papa from 'papaparse';
 import { EditTask } from '../../components/tasks/EditTask.tsx';
@@ -58,7 +58,9 @@ export default function TaskLog() {
                     ...task,
                     start: isoStringToLocaleString(task.start),
                     end: task.end && isoStringToLocaleString(task.end),
-                    duration: task.end ? calculateDuration(task.start, task.end) : '',
+                    duration: task.end
+                        ? formatDuration(calculateDuration(task.start, task.end))
+                        : '',
                 }));
         },
         [],

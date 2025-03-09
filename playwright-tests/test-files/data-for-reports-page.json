@@ -1,0 +1,53 @@
+{
+  "settings": {},
+  "todos": [],
+  "tasks": [
+    {
+      "name": "Investigate network connectivity issues",
+      "start": "2025-02-22T09:22:59.112Z",
+      "id": 1,
+      "end": "2025-02-22T11:23:04.408Z"
+    },
+    {
+      "name": "Prepare for impromptu meeting",
+      "start": "2025-02-22T11:23:04.408Z",
+      "project": "P-1234",
+      "id": 2,
+      "end": "2025-02-22T12:04:04.408Z"
+    },
+    {
+      "name": "Meeting with client",
+      "start": "2025-02-22T12:15:04.408Z",
+      "project": "P-1234",
+      "id": 3,
+      "end": "2025-02-22T13:15:04.408Z"
+    },
+    {
+      "name": "Create UI mocks for client",
+      "start": "2025-02-23T09:00:04.408Z",
+      "project": "P-1234",
+      "id": 4,
+      "end": "2025-02-23T10:00:04.408Z"
+    },
+    {
+      "name": "Email client",
+      "start": "2025-02-23T10:00:04.408Z",
+      "project": "P-1234",
+      "id": 5,
+      "end": "2025-02-23T10:15:04.408Z"
+    },
+    {
+      "name": "System design",
+      "start": "2025-02-23T10:15:04.408Z",
+      "project": "P-5678",
+      "id": 6,
+      "end": "2025-02-23T12:00:04.408Z"
+    },
+    {
+      "name": "Lunch",
+      "start": "2025-02-23T12:00:04.408Z",
+      "id": 7,
+      "end": "2025-02-23T12:45:17.408Z"
+    }
+  ]
+}

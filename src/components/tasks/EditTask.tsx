@@ -2,6 +2,7 @@ import { Button, Group, TextInput } from '@mantine/core';
 import { db, Task } from '../../database/database.ts';
 import { useForm } from '@mantine/form';
 import { DateTimePicker } from '@mantine/dates';
+import { timePickerFormat } from '../../date/format.ts';
 
 interface Props {
     close: () => void;
@@ -39,8 +40,6 @@ export function EditTask({ close, task }: Props) {
         close();
     }
 
-    const dateFormat = 'M/D/YYYY h:mm:ss A';
-
     return (
         <>
             <form onSubmit={form.onSubmit((values) => updateTask(values))}>
@@ -65,7 +64,7 @@ export function EditTask({ close, task }: Props) {
                     dropdownType="modal"
                     withAsterisk
                     label="Start"
-                    valueFormat={dateFormat}
+                    valueFormat={timePickerFormat}
                     key={form.key('start')}
                     {...form.getInputProps('start')}
                     mb={'sm'}
@@ -75,7 +74,7 @@ export function EditTask({ close, task }: Props) {
                     dropdownType="modal"
                     withAsterisk
                     label="End"
-                    valueFormat={dateFormat}
+                    valueFormat={timePickerFormat}
                     key={form.key('end')}
                     {...form.getInputProps('end')}
                 />

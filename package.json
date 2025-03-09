@@ -8,6 +8,7 @@
     "build": "tsc -b && ENVIRONMENT=prod vite build",
     "lint": "eslint .",
     "preview": "vite build && vite preview",
+    "test:vitest": "vitest",
     "test:playwright": "npx playwright test",
     "test:playwright:ui": "npx playwright test --ui",
     "test:playwright:codegen": "npx playwright codegen http://localhost:5173 --browser firefox"
@@ -48,6 +49,7 @@
     "prettier": "3.5.2",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.22.0",
-    "vite": "^6.1.0"
+    "vite": "^6.1.0",
+    "vitest": "^3.0.8"
   }
 }

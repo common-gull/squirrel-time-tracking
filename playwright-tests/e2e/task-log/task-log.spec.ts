@@ -1,5 +1,5 @@
 import { expect, Page, test } from '@playwright/test';
-import { navigateToTaskLog } from '../../actions/nav.actions';
+import { navigateTo } from '../../actions/nav.actions';
 import { restoreFromFile } from '../../actions/settings.actions';
 import { fileURLToPath } from 'url';
 import * as path from 'node:path';
@@ -8,6 +8,7 @@ import { join } from 'path';
 import { tmpdir } from 'os';
 import { readFile } from 'fs/promises';
 import * as todaySelectors from '../../selectors/today.selectors';
+import { links } from '../../selectors/nav.selectors';
 
 const startPath = '/#/task-log';
 // @ts-expect-error dnm
@@ -23,7 +24,7 @@ const restoreFilePath = path.join(
 async function setup(page: Page) {
     await page.goto(startPath);
     await restoreFromFile(restoreFilePath, page);
-    await navigateToTaskLog(page);
+    await navigateTo(page, links.taskLog);
 }
 
 async function exportData(buttonName: string, page: Page) {
