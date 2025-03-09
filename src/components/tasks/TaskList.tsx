@@ -1,5 +1,5 @@
 import { Text, Modal, Timeline, Anchor, Card } from '@mantine/core';
-import { calculateDuration } from '../../date/duration.ts';
+import { calculateDuration, formatDuration } from '../../date/duration.ts';
 import { useDisclosure } from '@mantine/hooks';
 import { Task } from '../../database/database.ts';
 import { useState } from 'react';
@@ -57,7 +57,7 @@ export function TaskList({ tasks }: Props) {
                                 End: {end.toLocaleTimeString()}
                             </Text>
                             <Text size="xs" mt={4}>
-                                Duration: {calculateDuration(task.start, task.end)}
+                                Duration: {formatDuration(calculateDuration(task.start, task.end))}
                             </Text>
                         </Timeline.Item>
                     );
