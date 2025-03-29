@@ -13,9 +13,7 @@ export default function Today() {
     const today = dayjs().format('YYYY-MM-DD');
     const tasks =
         useLiveQuery(() => db.tasks.where('start').aboveOrEqual(today).sortBy('start')) || [];
-    const todos =
-        useLiveQuery(() => db.todos.where('createdOn').aboveOrEqual(today).sortBy('createdOn')) ||
-        [];
+    const todos = useLiveQuery(() => db.todos.toArray()) || [];
     const completedTasks = tasks.filter((task) => task.end !== undefined);
     const incompleteTask = tasks.filter((task) => task.end === undefined).pop();
     const [currentTask, setCurrentTask] = useState<Task>();
@@ -47,6 +45,7 @@ export default function Today() {
         }
         const newTask = {
             name: todo.name,
+            project: todo.project,
             start: new Date().toISOString(),
         };
         const id = await db.tasks.add(newTask);

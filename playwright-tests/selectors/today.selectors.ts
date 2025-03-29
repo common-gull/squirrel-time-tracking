@@ -1,7 +1,8 @@
 export const todos = {
     complete: 'Complete',
     delete: 'Delete',
-    input: 'What do you need to get done',
+    name: 'Name',
+    project: 'Project',
     start: 'Start',
 };
 
@@ -15,6 +16,7 @@ export const tasks = {
         end: 'End *',
         heading: 'Edit Task',
         name: 'Name',
+        project: 'Project',
         start: 'Start *',
         timeInput: 'input[type="time"]',
         update: 'Update',

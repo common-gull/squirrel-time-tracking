@@ -107,11 +107,13 @@ test('Backup downloads all stored data', async ({ page }) => {
                 createdOn: expect.any(String),
                 id: 1,
                 name: 'Update Project Timeline',
+                project: '',
             },
             {
                 createdOn: expect.any(String),
                 id: 2,
                 name: 'Email Follow-ups',
+                project: '',
             },
         ],
     });

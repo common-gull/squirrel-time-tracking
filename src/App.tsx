@@ -1,5 +1,5 @@
 import './App.css';
-import { Layout } from './pages/Layout.tsx';
+import { Layout } from './layout/Layout.tsx';
 import { Route, Routes } from 'react-router';
 import { routes } from './routing/routes.tsx';
 import { Suspense } from 'react';
