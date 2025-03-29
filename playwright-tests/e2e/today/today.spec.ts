@@ -5,8 +5,13 @@ import { addTask, addTodo } from '../../actions/today.actions';
 const startPath = '/#/';
 
 const todos = {
+    invalidTodoName: 'A ',
     updateProjectTimeline: 'Update Project Timeline',
     emailFollowUps: 'Email Follow-ups',
+};
+
+const projects = {
+    projectA: 'Project-A',
 };
 
 const tasks = {
@@ -30,19 +35,18 @@ test('todos can be added and removed', async ({ page }) => {
     await expect(page.getByText(todos.updateProjectTimeline)).not.toBeVisible();
 });
 
-test('todo is updated to completed state when complete button is clicked', async ({ page }) => {
+test('todo can be added with project', async ({ page }) => {
     await page.goto(startPath);
-    await addTodo(todos.emailFollowUps, page);
+    await addTodo(todos.updateProjectTimeline, page, projects.projectA);
 
-    await expect(page.getByRole('button', { name: todaySelectors.todos.start })).toBeVisible();
-    await expect(page.getByRole('button', { name: todaySelectors.todos.complete })).toBeVisible();
+    await expect(page.getByText(todos.updateProjectTimeline)).toBeVisible();
+    await expect(page.getByText(projects.projectA)).toBeVisible();
+});
 
-    await page.getByRole('button', { name: todaySelectors.todos.complete }).click();
-
-    await expect(page.getByRole('button', { name: todaySelectors.todos.start })).not.toBeVisible();
-    await expect(
-        page.getByRole('button', { name: todaySelectors.todos.complete }),
-    ).not.toBeVisible();
+test('todo name must have at least two characters', async ({ page }) => {
+    await page.goto(startPath);
+    await addTodo(todos.invalidTodoName, page);
+    await expect(page.getByText('Name must include at least 2 characters')).toBeVisible();
 });
 
 test('task is created when start todo is clicked', async ({ page }) => {
@@ -53,6 +57,19 @@ test('task is created when start todo is clicked', async ({ page }) => {
     await expect(
         page.getByText(todaySelectors.tasks.currentTask + todos.emailFollowUps),
     ).toBeVisible();
+});
+
+test('project from todo is carried over to task', async ({ page }) => {
+    await page.goto(startPath);
+    await addTodo(todos.emailFollowUps, page, projects.projectA);
+
+    await page.getByRole('button', { name: todaySelectors.todos.start }).click();
+    await page.locator('button').filter({ hasText: todaySelectors.tasks.complete }).click();
+    await page.locator('a').filter({ hasText: todos.emailFollowUps }).click();
+
+    await expect(
+        page.getByRole('textbox', { name: todaySelectors.tasks.editTask.project }).nth(1),
+    ).toHaveValue(projects.projectA);
 });
 
 test('current task is completed when a new task is added', async ({ page }) => {
@@ -97,9 +114,10 @@ test('completed task can be updated', async ({ page }) => {
     await addTask(tasks.investigateNetworkConnectivity, page);
     await page.locator('button').filter({ hasText: todaySelectors.tasks.complete }).click();
     await page.locator('a').filter({ hasText: tasks.investigateNetworkConnectivity }).click();
-    await page.getByRole('textbox', { name: todaySelectors.tasks.editTask.name }).click();
+    await page.getByRole('textbox', { name: todaySelectors.tasks.editTask.name }).nth(1).click();
     await page
         .getByRole('textbox', { name: todaySelectors.tasks.editTask.name })
+        .nth(1)
         .fill(updatedTaskDesc);
 
     await page.getByLabel(todaySelectors.tasks.editTask.start).click();

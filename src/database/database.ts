@@ -13,6 +13,7 @@ interface Todo {
     createdOn: string;
     id: number;
     name: string;
+    project?: string;
 }
 
 const db = new Dexie('SquirrelDB') as Dexie & {
@@ -22,7 +23,7 @@ const db = new Dexie('SquirrelDB') as Dexie & {
 
 db.version(1).stores({
     tasks: '++id, name, start, end, project',
-    todos: '++id, name, completedOn, createdOn',
+    todos: '++id, name, completedOn, createdOn, project',
 });
 
 export type { Task, Todo };

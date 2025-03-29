@@ -50,6 +50,11 @@ export function TaskList({ tasks }: Props) {
                             }
                             bullet={<IconCheck size={20} />}
                         >
+                            {task.project && (
+                                <Text c="dimmed" size="sm">
+                                    Project: {task.project}
+                                </Text>
+                            )}
                             <Text c="dimmed" size="lg">
                                 Start: {start.toLocaleTimeString()}
                             </Text>
