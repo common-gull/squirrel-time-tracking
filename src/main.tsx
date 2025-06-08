@@ -7,6 +7,7 @@ import '@mantine/dates/styles.css';
 import '@mantine/notifications/styles.css';
 import 'mantine-react-table/styles.css';
 import { MantineProvider } from '@mantine/core';
+import { ModalsProvider } from '@mantine/modals';
 import { mantineTheme } from './theme.ts';
 import { Notifications } from '@mantine/notifications';
 import { HashRouter } from 'react-router';
@@ -16,8 +17,10 @@ createRoot(document.getElementById('root')!).render(
     <StrictMode>
         <HashRouter>
             <MantineProvider defaultColorScheme={'dark'} theme={mantineTheme}>
-                <Notifications />
-                <App />
+                <ModalsProvider>
+                    <Notifications />
+                    <App />
+                </ModalsProvider>
             </MantineProvider>
         </HashRouter>
     </StrictMode>,
