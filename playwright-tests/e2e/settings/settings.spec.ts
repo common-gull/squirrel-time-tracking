@@ -61,6 +61,35 @@ async function checkTaskAndTodosDoNotExist(page: Page) {
     ).not.toBeVisible();
 }
 
+async function enableBackupConfirmation(page: Page) {
+    await navigateTo(page, links.settings);
+
+    const switchLabel = page.locator('text=Ask to backup before closing');
+    await expect(switchLabel).toBeVisible();
+
+    await switchLabel.click();
+
+    await expect(page.getByText('Backup confirmation on close enabled')).toBeVisible();
+}
+
+async function disableBackupConfirmation(page: Page) {
+    await navigateTo(page, links.settings);
+
+    const switchLabel = page.locator('text=Ask to backup before closing');
+    await expect(switchLabel).toBeVisible();
+
+    await switchLabel.click();
+
+    await expect(page.getByText('Backup confirmation on close disabled')).toBeVisible();
+}
+
+async function isBackupConfirmationEnabled(page: Page): Promise<boolean> {
+    await navigateTo(page, links.settings);
+
+    const checkbox = page.locator('input[type="checkbox"]');
+    return await checkbox.isChecked();
+}
+
 test('Delete all data removes all todos and tasks when clicked', async ({ page }) => {
     await setup(page);
     await page.getByRole('button', { name: settingsSelectors.main.deleteAllData }).click();
@@ -82,7 +111,7 @@ test('Backup downloads all stored data', async ({ page }) => {
     const fileJson = JSON.parse(fileData);
 
     expect(fileJson).toEqual({
-        settings: {},
+        settings: [],
         tasks: [
             {
                 end: expect.any(String),
@@ -136,4 +165,31 @@ test('Restore from file restores tasks and todos', async ({ page }) => {
 
     await navigateTo(page, links.today);
     await checkTaskAndTodosExist(page);
+});
+
+test('Backup confirmation can toggled', async ({ page }) => {
+    await setup(page);
+
+    await enableBackupConfirmation(page);
+
+    await disableBackupConfirmation(page);
+
+    const isEnabled = await isBackupConfirmationEnabled(page);
+    expect(isEnabled).toBe(false);
+});
+
+test('Backup confirmation modal appears when closing tab with setting enabled', async ({
+    page,
+}) => {
+    await setup(page);
+
+    await enableBackupConfirmation(page);
+
+    page.on('dialog', async (dialog) => {
+        expect(dialog.type()).toBe('beforeunload');
+        expect(true).toBe(true);
+        await dialog.accept();
+    });
+
+    await page.goto('/');
 });

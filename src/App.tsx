@@ -3,8 +3,11 @@ import { Layout } from './layout/Layout.tsx';
 import { Route, Routes } from 'react-router';
 import { routes } from './routing/routes.tsx';
 import { Suspense } from 'react';
+import { useBackupConfirmation } from './services/backup/useBackupConfirmation.tsx';
 
 function App() {
+    useBackupConfirmation();
+
     return (
         <Suspense fallback={<div>Loading...</div>}>
             <Routes>
