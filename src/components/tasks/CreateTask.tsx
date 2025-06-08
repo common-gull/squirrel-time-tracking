@@ -1,12 +1,14 @@
 import { Input } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { db, Task } from '../../database/database.ts';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
     onTaskCreated: (task: Task) => Promise<void>;
 }
 
 export function CreateTask({ onTaskCreated }: Props) {
+    const { t } = useTranslation();
     const form = useForm({
         mode: 'uncontrolled',
         initialValues: {
@@ -33,7 +35,7 @@ export function CreateTask({ onTaskCreated }: Props) {
         <>
             <form onSubmit={form.onSubmit((values) => createTask(values))}>
                 <Input
-                    placeholder="What task are you focusing on right now?"
+                    placeholder={t('tasks.createPlaceholder')}
                     key={form.key('task')}
                     {...form.getInputProps('task')}
                 />

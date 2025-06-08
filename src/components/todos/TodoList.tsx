@@ -1,6 +1,7 @@
 import { Text, Card, ActionIcon, Group, Grid } from '@mantine/core';
 import { db, Todo } from '../../database/database.ts';
 import { IconPlayerPlay, IconTrash } from '@tabler/icons-react';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
     onTodoStart: (todo: Todo) => void;
@@ -8,6 +9,8 @@ interface Props {
 }
 
 export function TodoList({ onTodoStart, todos }: Props) {
+    const { t } = useTranslation();
+    
     if (!todos.length) {
         return null;
     }
@@ -39,7 +42,7 @@ export function TodoList({ onTodoStart, todos }: Props) {
                                             <>
                                                 <ActionIcon
                                                     variant="filled"
-                                                    aria-label="Start"
+                                                    aria-label={t('todos.startTask')}
                                                     onClick={() => onTodoStart(todo)}
                                                 >
                                                     <IconPlayerPlay
@@ -53,7 +56,7 @@ export function TodoList({ onTodoStart, todos }: Props) {
                                         <ActionIcon
                                             variant="filled"
                                             color={'red'}
-                                            aria-label="Delete"
+                                            aria-label={t('common.delete')}
                                             onClick={() => deleteTodo(todo)}
                                         >
                                             <IconTrash

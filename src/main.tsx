@@ -10,6 +10,7 @@ import { MantineProvider } from '@mantine/core';
 import { mantineTheme } from './theme.ts';
 import { Notifications } from '@mantine/notifications';
 import { HashRouter } from 'react-router';
+import './i18n';
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>

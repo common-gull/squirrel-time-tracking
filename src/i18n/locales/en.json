@@ -1,0 +1,77 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "close": "Close",
+    "confirm": "Confirm",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "warning": "Warning",
+    "info": "Info"
+  },
+  "navigation": {
+    "today": "Today",
+    "taskLog": "Task Log",
+    "reports": "Reports",
+    "settings": "Settings"
+  },
+  "app": {
+    "title": "Squirrel!"
+  },
+  "pages": {
+    "today": {
+      "todos": "Todos",
+      "tasks": "Tasks"
+    },
+    "reports": {
+      "title": "Daily Task Hours Breakdown",
+      "settings": "Settings",
+      "dateRange": "Date Range",
+      "groupBy": "Group By",
+      "update": "Update",
+      "name": "Name",
+      "project": "Project"
+    }
+  },
+  "tasks": {
+    "createPlaceholder": "What task are you focusing on right now?",
+    "project": "Project",
+    "task": "Task",
+    "description": "Description",
+    "date": "Date",
+    "duration": "Duration",
+    "start": "Start",
+    "stop": "Stop",
+    "complete": "Complete",
+    "cancel": "Cancel",
+    "name": "Name",
+    "namePlaceholder": "Checking Email",
+    "projectPlaceholder": "Project A",
+    "end": "End",
+    "update": "Update",
+    "nameValidation": "Name must have at least 2 letters"
+  },
+  "todos": {
+    "title": "Todos",
+    "createPlaceholder": "Add a new todo...",
+    "markComplete": "Mark as complete",
+    "startTask": "Start task",
+    "name": "Name",
+    "project": "Project",
+    "namePlaceholder": "System Design",
+    "projectPlaceholder": "Project-A",
+    "addTodo": "Add Todo",
+    "nameValidation": "Name must include at least 2 characters"
+  },
+  "forms": {
+    "required": "This field is required",
+    "invalidEmail": "Please enter a valid email address",
+    "invalidDate": "Please enter a valid date",
+    "submit": "Submit",
+    "reset": "Reset"
+  }
+} 

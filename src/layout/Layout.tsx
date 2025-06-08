@@ -3,10 +3,12 @@ import { useDisclosure } from '@mantine/hooks';
 import { Link, Outlet, useLocation } from 'react-router';
 import { routes } from '../routing/routes.tsx';
 import Squirrel from '../assets/squirrel.svg';
+import { useTranslation } from 'react-i18next';
 
 export function Layout() {
     const [opened, { toggle }] = useDisclosure();
     const location = useLocation();
+    const { t } = useTranslation();
 
     const routesWithNav = routes.filter((route) => route.nav !== undefined);
 
@@ -23,7 +25,7 @@ export function Layout() {
                         <div>
                             <img src={Squirrel} height={'28px'} alt="Squirrel Icon" />
                         </div>
-                        <Text ml={'sm'}>Squirrel!</Text>
+                        <Text ml={'sm'}>{t('app.title')}</Text>
                     </Flex>
                 </Group>
             </AppShell.Header>
@@ -32,7 +34,7 @@ export function Layout() {
                     <NavLink
                         key={route.path}
                         active={location.pathname.toLowerCase() === route.path}
-                        label={route.nav.label}
+                        label={t(route.nav.labelKey)}
                         component={Link}
                         to={route.path}
                         leftSection={route.nav.icon}

@@ -8,8 +8,10 @@ import { CreateTodo } from '../../components/todos/CreateTodo.tsx';
 import { CreateTask } from '../../components/tasks/CreateTask.tsx';
 import { useEffect, useState } from 'react';
 import { TodoList } from '../../components/todos/TodoList.tsx';
+import { useTranslation } from 'react-i18next';
 
 export default function Today() {
+    const { t } = useTranslation();
     const today = dayjs().format('YYYY-MM-DD');
     const tasks =
         useLiveQuery(() => db.tasks.where('start').aboveOrEqual(today).sortBy('start')) || [];
@@ -64,7 +66,7 @@ export default function Today() {
                 <div>
                     <Card>
                         <Text fw={500} size={'xl'}>
-                            Todos
+                            {t('pages.today.todos')}
                         </Text>
                         <CreateTodo />
                         <TodoList onTodoStart={handleTodoStart} todos={todos} />
@@ -74,7 +76,7 @@ export default function Today() {
                 <div>
                     <Card>
                         <Text fw={500} size={'xl'}>
-                            Tasks
+                            {t('pages.today.tasks')}
                         </Text>
                         <CreateTask onTaskCreated={handleTaskCreated} />
                         {currentTask && (

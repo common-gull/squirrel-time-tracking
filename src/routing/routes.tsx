@@ -12,7 +12,7 @@ export const routes = [
         path: '/',
         element: <Today />,
         nav: {
-            label: 'Today',
+            labelKey: 'navigation.today',
             icon: <IconHome2 size={16} stroke={1.5} />,
         },
     },
@@ -20,7 +20,7 @@ export const routes = [
         path: '/task-log',
         element: <TaskLog />,
         nav: {
-            label: 'Task Log',
+            labelKey: 'navigation.taskLog',
             icon: <IconLogs size={16} stroke={1.5} />,
         },
     },
@@ -28,7 +28,7 @@ export const routes = [
         path: '/reports',
         element: <Reports />,
         nav: {
-            label: 'Reports',
+            labelKey: 'navigation.reports',
             icon: <IconReport size={16} stroke={1.5} />,
         },
     },
@@ -36,7 +36,7 @@ export const routes = [
         path: '/settings',
         element: <Settings />,
         nav: {
-            label: 'Settings',
+            labelKey: 'navigation.settings',
             icon: <IconSettings size={16} stroke={1.5} />,
         },
     },

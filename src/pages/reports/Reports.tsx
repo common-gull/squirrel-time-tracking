@@ -7,6 +7,7 @@ import { Task } from '../../database/database.ts';
 import { useState } from 'react';
 import { calculateTaskHours } from '../../services/reports/reports.service.ts';
 import { TaskHours } from '../../services/reports/interfaces/task-hours.ts';
+import { useTranslation } from 'react-i18next';
 
 interface Settings {
     dateRange: [Date, Date];
@@ -14,6 +15,7 @@ interface Settings {
 }
 
 export default function Reports() {
+    const { t } = useTranslation();
     const [settings, setSettings] = useState<Settings>({
         dateRange: [
             dayjs().subtract(7, 'd').startOf('day').toDate(),
@@ -56,7 +58,7 @@ export default function Reports() {
                 order={{ base: 2, sm: 2, md: 1, lg: 1 }}
             >
                 <Card>
-                    <Text size="lg">Daily Task Hours Breakdown</Text>
+                    <Text size="lg">{t('pages.reports.title')}</Text>
                     <Table.ScrollContainer minWidth={undefined}>
                         <Table>
                             <Table.Thead>
@@ -79,7 +81,7 @@ export default function Reports() {
                 order={{ base: 1, sm: 1, md: 2, lg: 2 }}
             >
                 <Card>
-                    Settings
+                    {t('pages.reports.settings')}
                     <form onSubmit={form.onSubmit((values) => setSettings(values))}>
                         <DatePickerInput
                             type="range"
@@ -88,22 +90,22 @@ export default function Reports() {
                             maxDate={dayjs().toDate()}
                             minDate={dayjs().subtract(6, 'month').toDate()}
                             withAsterisk
-                            label="Date Range"
+                            label={t('pages.reports.dateRange')}
                             key={form.key('dateRange')}
                             {...form.getInputProps('dateRange')}
                             mb={'sm'}
                         />
                         <NativeSelect
-                            label="Group By"
+                            label={t('pages.reports.groupBy')}
                             data={[
-                                { label: 'Name', value: 'name' },
-                                { label: 'Project', value: 'project' },
+                                { label: t('pages.reports.name'), value: 'name' },
+                                { label: t('pages.reports.project'), value: 'project' },
                             ]}
                             key={form.key('groupBy')}
                             {...form.getInputProps('groupBy')}
                             mb={'sm'}
                         />
-                        <Button type={'submit'}>Update</Button>
+                        <Button type={'submit'}>{t('pages.reports.update')}</Button>
                     </form>
                 </Card>
             </Grid.Col>
