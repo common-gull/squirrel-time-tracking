@@ -29,7 +29,7 @@ export default function Reports() {
         initialValues: settings,
     });
 
-    const { data, dates }: TaskHours = useLiveQuery(
+    const { data, dates, dailyTotals, grandTotal }: TaskHours = useLiveQuery(
         async () =>
             calculateTaskHours(
                 dayjs(settings.dateRange[0]).startOf('day').toDate(),
@@ -37,7 +37,7 @@ export default function Reports() {
                 settings.groupBy,
             ),
         [settings],
-        { data: {}, dates: [] },
+        { data: {}, dates: [], dailyTotals: {}, grandTotal: 0 },
     );
 
     const rows = Object.values(data).map((task) => (
@@ -54,6 +54,21 @@ export default function Reports() {
             })}
         </Table.Tr>
     ));
+
+    const totalRow = (
+        <Table.Tr style={{ fontWeight: 'bold', borderTop: '2px solid #dee2e6' }}>
+            <Table.Td style={{ fontWeight: 'bold' }}>{t('pages.reports.dailyTotal')}</Table.Td>
+            {dates.map((date) => {
+                const total = dailyTotals[date] ?? 0;
+                const fixedTotal = total.toFixed(2);
+                return (
+                    <Table.Td key={date} style={{ fontWeight: 'bold' }}>
+                        <Text c={fixedTotal === '0.00' ? 'dimmed' : ''}>{fixedTotal}</Text>
+                    </Table.Td>
+                );
+            })}
+        </Table.Tr>
+    );
 
     return (
         <Grid>
@@ -75,9 +90,15 @@ export default function Reports() {
                                     ))}
                                 </Table.Tr>
                             </Table.Thead>
-                            <Table.Tbody>{rows}</Table.Tbody>
+                            <Table.Tbody>
+                                {rows}
+                                {totalRow}
+                            </Table.Tbody>
                         </Table>
                     </Table.ScrollContainer>
+                    <Text size="lg" mt="md" style={{ fontWeight: 'bold' }}>
+                        {t('pages.reports.totalHours')}: {grandTotal.toFixed(2)}
+                    </Text>
                 </Card>
             </Grid.Col>
             <Grid.Col

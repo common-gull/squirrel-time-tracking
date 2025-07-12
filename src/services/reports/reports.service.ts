@@ -31,6 +31,27 @@ function buildTaskHourData(
     }, {});
 }
 
+const calculateTotals = (data: TaskHours['data'], dates: string[]) => {
+    const dailyTotals: { [date: string]: number } = {};
+    let grandTotal = 0;
+
+    // Initialize daily totals
+    dates.forEach((date) => {
+        dailyTotals[date] = 0;
+    });
+
+    // Calculate daily totals by summing all tasks for each date
+    Object.values(data).forEach((task) => {
+        dates.forEach((date) => {
+            const taskHours = task.totals[date] || 0;
+            dailyTotals[date] += taskHours;
+            grandTotal += taskHours;
+        });
+    });
+
+    return { dailyTotals, grandTotal };
+};
+
 export async function calculateTaskHours(
     start: Date,
     end: Date,
@@ -48,5 +69,7 @@ export async function calculateTaskHours(
         .sortBy('start');
 
     const data = buildTaskHourData(tasks, dates, groupBy);
-    return { data, dates };
+    const { dailyTotals, grandTotal } = calculateTotals(data, dates);
+
+    return { data, dates, dailyTotals, grandTotal };
 }
