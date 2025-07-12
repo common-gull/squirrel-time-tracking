@@ -39,8 +39,11 @@ test('Displays expected table data with default settings', async ({ page }) => {
         'Email client,0.00,0.00,0.00,0.00,0.00,0.25,0.00,0.00',
         'System design,0.00,0.00,0.00,0.00,0.00,1.75,0.00,0.00',
         'Lunch,0.00,0.00,0.00,0.00,0.00,0.75,0.00,0.00',
+        'Daily Total,0.00,0.00,0.00,0.00,3.68,3.75,0.00,0.00',
     ];
     await expect(page.getByRole('table')).toContainText(tableDataToLongString(tableData));
+
+    await expect(page.getByText('Total Hours: 7.44')).toBeVisible();
 });
 
 test('Displays expected table data with default range and group by set to project', async ({
@@ -55,8 +58,11 @@ test('Displays expected table data with default range and group by set to projec
         'No Project,0.00,0.00,0.00,0.00,2.00,0.75,0.00,0.00',
         'P-1234,0.00,0.00,0.00,0.00,1.68,1.25,0.00,0.00',
         'P-5678,0.00,0.00,0.00,0.00,0.00,1.75,0.00,0.00',
+        'Daily Total,0.00,0.00,0.00,0.00,3.68,3.75,0.00,0.00',
     ];
     await expect(page.getByRole('table')).toContainText(tableDataToLongString(tableData));
+
+    await expect(page.getByText('Total Hours: 7.44')).toBeVisible();
 });
 
 test('Displays expected table data with custom settings', async ({ page }) => {
@@ -73,6 +79,9 @@ test('Displays expected table data with custom settings', async ({ page }) => {
         'project,2025-02-18,2025-02-19,2025-02-20,2025-02-21,2025-02-22',
         'No Project,0.00,0.00,0.00,0.00,2.00',
         'P-1234,0.00,0.00,0.00,0.00,1.68',
+        'Daily Total,0.00,0.00,0.00,0.00,3.68',
     ];
     await expect(page.getByRole('table')).toContainText(tableDataToLongString(tableData));
+
+    await expect(page.getByText('Total Hours: 3.68')).toBeVisible();
 });

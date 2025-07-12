@@ -7,4 +7,6 @@ export interface TaskHours {
         };
     };
     dates: string[];
+    dailyTotals: { [date: string]: number };
+    grandTotal: number;
 }

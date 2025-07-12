@@ -41,7 +41,9 @@
       "groupBy": "Group By",
       "update": "Update",
       "name": "Name",
-      "project": "Project"
+      "project": "Project",
+      "dailyTotal": "Daily Total",
+      "totalHours": "Total Hours"
     },
     "settings": {
       "backup": {
