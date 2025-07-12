@@ -51,7 +51,33 @@
         "description": "Before clearing your browser cache, be sure to back up your data to prevent loss. Backing up protects against accidental deletion, system crashes, and software issues, ensuring you can easily restore your settings and preferences.",
         "button": "Backup",
         "askBeforeClosing": "Warn before exiting",
-        "askBeforeClosingDescription": "When enabled, you'll get a browser warning before accidentally exiting the application. This reminds you to backup your data manually if needed."
+        "askBeforeClosingDescription": "When enabled, you'll get a browser warning before accidentally exiting the application. This reminds you to backup your data manually if needed.",
+        "type": {
+          "plain": "Standard Backup (JSON)",
+          "encrypted": "Encrypted Backup (Password Protected)"
+        },
+        "encrypted": {
+          "passwordModal": {
+            "title": "Set Backup Password",
+            "passwordLabel": "Password",
+            "confirmLabel": "Confirm Password",
+            "warning": "Important: This password cannot be recovered. Store it safely!",
+            "createButton": "Create Backup",
+            "passwordMismatch": "Passwords do not match",
+            "passwordTooShort": "Password must be at least 8 characters"
+          },
+          "restoreModal": {
+            "title": "Encrypted Backup Detected",
+            "description": "This backup is password protected. Please enter the password:",
+            "passwordLabel": "Password",
+            "restoreButton": "Restore"
+          },
+          "errors": {
+            "encryptionFailed": "Failed to create encrypted backup. Please try again.",
+            "decryptionFailed": "Invalid password or corrupted file.",
+            "invalidFormat": "Unrecognized backup file format."
+          }
+        }
       },
       "restore": {
         "title": "Restore from file",
@@ -128,6 +154,7 @@
   "notifications": {
     "backupEnabled": "Exit warning enabled",
     "backupDisabled": "Exit warning disabled",
+    "backupCreated": "Backup created successfully!",
     "dataRestored": "Data restored from file!",
     "dataDeleted": "Data deleted!",
     "importError": "Unable to import data!"

@@ -1,13 +1,42 @@
-import { Button, Card, Container, FileButton, Switch, Text, Title } from '@mantine/core';
+import {
+    Button,
+    Card,
+    Container,
+    FileButton,
+    Switch,
+    Text,
+    Title,
+    Radio,
+    Stack,
+} from '@mantine/core';
 import { db } from '../../database/database.ts';
 import { notifications } from '@mantine/notifications';
-import { download } from '../../download/download.ts';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
+import { createBackup } from '../../services/backup/backup.service';
+import { BackupPasswordModal } from '../../components/settings/BackupPasswordModal';
+import { RestorePasswordModal } from '../../components/settings/RestorePasswordModal';
+import { detectAndValidateBackupFile } from '../../services/backup/encryption/file-detector';
+import { decryptBackupData } from '../../services/backup/encryption/crypto.service';
+import { restoreBackupData } from '../../services/backup/backup.service';
+import {
+    BackupData,
+    BackupType,
+    EncryptedBackupFormat,
+} from '../../services/backup/encryption/types';
 
 export default function Settings() {
     const { t } = useTranslation();
     const backupOnCloseSetting = useLiveQuery(() => db.settings.get('backupOnClose'));
+
+    const [backupType, setBackupType] = useState<BackupType>('plain');
+    const [passwordModalOpened, setPasswordModalOpened] = useState(false);
+    const [restorePasswordModalOpened, setRestorePasswordModalOpened] = useState(false);
+    const [pendingFileContent, setPendingFileContent] = useState<string | null>(null);
+    const [backupLoading, setBackupLoading] = useState(false);
+    const [restoreLoading, setRestoreLoading] = useState(false);
+    const [restoreError, setRestoreError] = useState<string | null>(null);
 
     async function toggleBackupOnClose(checked: boolean) {
         await db.settings.put({ id: 'backupOnClose', value: checked });
@@ -16,7 +45,33 @@ export default function Settings() {
         });
     }
 
-    function importData(file: File | null) {
+    const handleBackupClick = () => {
+        if (backupType === 'encrypted') {
+            setPasswordModalOpened(true);
+        } else {
+            handleCreateBackup('plain');
+        }
+    };
+
+    const handleCreateBackup = async (type: BackupType, password?: string) => {
+        setBackupLoading(true);
+        try {
+            await createBackup(type, password);
+            setPasswordModalOpened(false);
+            notifications.show({
+                message: t('notifications.backupCreated'),
+            });
+        } catch {
+            notifications.show({
+                message: t('pages.settings.backup.encrypted.errors.encryptionFailed'),
+                color: 'red',
+            });
+        } finally {
+            setBackupLoading(false);
+        }
+    };
+
+    const handleFileSelect = (file: File | null) => {
         if (!file) {
             return;
         }
@@ -27,27 +82,66 @@ export default function Settings() {
                 return;
             }
 
-            // TODO - Import validation/data migrator
-            const { settings, tasks, todos } = JSON.parse(e.target.result);
-            if (!tasks) {
-                throw new Error(t('notifications.importError'));
+            try {
+                const fileContent = e.target.result;
+                const { type, data } = detectAndValidateBackupFile(fileContent);
+
+                if (type === 'encrypted') {
+                    setPendingFileContent(fileContent);
+                    setRestorePasswordModalOpened(true);
+                    setRestoreError(null);
+                } else {
+                    await restoreBackupData(data as BackupData);
+                    notifications.show({
+                        message: t('notifications.dataRestored'),
+                    });
+                }
+            } catch {
+                notifications.show({
+                    message: t('pages.settings.backup.encrypted.errors.invalidFormat'),
+                    color: 'red',
+                });
             }
-            await clearDb();
-            await db.settings.bulkAdd(Array.isArray(settings) ? settings : []);
-            await db.tasks.bulkAdd(tasks);
-            await db.todos.bulkAdd(todos);
+        };
+    };
+
+    const handleRestoreWithPassword = async (password: string) => {
+        if (!pendingFileContent) return;
+
+        setRestoreLoading(true);
+        setRestoreError(null);
+
+        try {
+            const { data } = detectAndValidateBackupFile(pendingFileContent);
+            const encryptedBackup = data as EncryptedBackupFormat;
+
+            const decryptedData = await decryptBackupData({
+                encryptedData: encryptedBackup.data,
+                salt: encryptedBackup.crypto.salt,
+                iv: encryptedBackup.crypto.iv,
+                authTag: encryptedBackup.crypto.authTag,
+                password,
+            });
+
+            await restoreBackupData(decryptedData);
+
+            setRestorePasswordModalOpened(false);
+            setPendingFileContent(null);
             notifications.show({
                 message: t('notifications.dataRestored'),
             });
-        };
-    }
+        } catch {
+            setRestoreError(t('pages.settings.backup.encrypted.errors.decryptionFailed'));
+        } finally {
+            setRestoreLoading(false);
+        }
+    };
 
-    async function backup() {
-        const settings = await db.settings.toArray();
-        const tasks = await db.tasks.toArray();
-        const todos = await db.todos.toArray();
-        download(`squirrel-backup_${new Date().toISOString()}.json`, { settings, tasks, todos });
-    }
+    const handleRestoreModalClose = () => {
+        setRestorePasswordModalOpened(false);
+        setPendingFileContent(null);
+        setRestoreError(null);
+    };
 
     async function clearDb() {
         await db.tasks.clear();
@@ -67,9 +161,31 @@ export default function Settings() {
             <Card mb={'sm'}>
                 <Title order={2}>{t('pages.settings.backup.title')}</Title>
                 <Text>{t('pages.settings.backup.description')}</Text>
-                <Button onClick={backup} mb="md">
-                    {t('pages.settings.backup.button')}
-                </Button>
+
+                <Stack gap="md" mb="md">
+                    <Radio.Group
+                        value={backupType}
+                        onChange={(value) => setBackupType(value as BackupType)}
+                        label="Backup Type"
+                    >
+                        <Stack gap="xs">
+                            <Radio value="plain" label={t('pages.settings.backup.type.plain')} />
+                            <Radio
+                                value="encrypted"
+                                label={t('pages.settings.backup.type.encrypted')}
+                            />
+                        </Stack>
+                    </Radio.Group>
+
+                    <Button
+                        onClick={handleBackupClick}
+                        loading={backupLoading}
+                        disabled={backupLoading}
+                    >
+                        {t('pages.settings.backup.button')}
+                    </Button>
+                </Stack>
+
                 <Switch
                     label={t('pages.settings.backup.askBeforeClosing')}
                     checked={backupOnCloseSetting?.value === true}
@@ -84,7 +200,7 @@ export default function Settings() {
             <Card mb={'sm'}>
                 <Title order={2}>{t('pages.settings.restore.title')}</Title>
                 <Text>{t('pages.settings.restore.description')}</Text>
-                <FileButton onChange={importData} accept="application/json">
+                <FileButton onChange={handleFileSelect} accept="application/json">
                     {(props) => <Button {...props}>{t('pages.settings.restore.button')}</Button>}
                 </FileButton>
             </Card>
@@ -94,6 +210,21 @@ export default function Settings() {
                 <Text>{t('pages.settings.deleteData.description')}</Text>
                 <Button onClick={deleteAllData}>{t('pages.settings.deleteData.button')}</Button>
             </Card>
+
+            <BackupPasswordModal
+                opened={passwordModalOpened}
+                onClose={() => setPasswordModalOpened(false)}
+                onConfirm={(password) => handleCreateBackup('encrypted', password)}
+                loading={backupLoading}
+            />
+
+            <RestorePasswordModal
+                opened={restorePasswordModalOpened}
+                onClose={handleRestoreModalClose}
+                onConfirm={handleRestoreWithPassword}
+                loading={restoreLoading}
+                error={restoreError || undefined}
+            />
         </Container>
     );
 }
