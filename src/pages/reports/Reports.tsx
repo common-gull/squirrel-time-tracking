@@ -10,7 +10,7 @@ import { TaskHours } from '../../services/reports/interfaces/task-hours.ts';
 import { useTranslation } from 'react-i18next';
 
 interface Settings {
-    dateRange: [Date, Date];
+    dateRange: [string, string];
     groupBy: keyof Pick<Task, 'name' | 'project'>;
 }
 
@@ -18,8 +18,8 @@ export default function Reports() {
     const { t } = useTranslation();
     const [settings, setSettings] = useState<Settings>({
         dateRange: [
-            dayjs().subtract(7, 'd').startOf('day').toDate(),
-            dayjs().endOf('day').toDate(),
+            dayjs().subtract(7, 'd').startOf('day').format('YYYY-MM-DD'),
+            dayjs().endOf('day').format('YYYY-MM-DD'),
         ],
         groupBy: 'name',
     });
@@ -31,7 +31,11 @@ export default function Reports() {
 
     const { data, dates }: TaskHours = useLiveQuery(
         async () =>
-            calculateTaskHours(settings.dateRange[0], settings.dateRange[1], settings.groupBy),
+            calculateTaskHours(
+                dayjs(settings.dateRange[0]).startOf('day').toDate(),
+                dayjs(settings.dateRange[1]).endOf('day').toDate(),
+                settings.groupBy,
+            ),
         [settings],
         { data: {}, dates: [] },
     );
@@ -87,8 +91,8 @@ export default function Reports() {
                             type="range"
                             dropdownType="modal"
                             allowSingleDateInRange
-                            maxDate={dayjs().toDate()}
-                            minDate={dayjs().subtract(6, 'month').toDate()}
+                            maxDate={dayjs().format('YYYY-MM-DD')}
+                            minDate={dayjs().subtract(6, 'month').format('YYYY-MM-DD')}
                             withAsterisk
                             label={t('pages.reports.dateRange')}
                             key={form.key('dateRange')}

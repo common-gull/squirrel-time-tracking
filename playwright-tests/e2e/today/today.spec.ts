@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import * as todaySelectors from '../../selectors/today.selectors';
-import { addTask, addTodo } from '../../actions/today.actions';
+import { addTask, addTodo, updateTimePicker } from '../../actions/today.actions';
 
 const startPath = '/#/';
 
@@ -121,14 +121,10 @@ test('completed task can be updated', async ({ page }) => {
         .fill(updatedTaskDesc);
 
     await page.getByLabel(todaySelectors.tasks.editTask.start).click();
-    await page.locator(todaySelectors.tasks.editTask.timeInput).click();
-    await page.locator(todaySelectors.tasks.editTask.timeInput).fill('08:30');
-    await page.locator(todaySelectors.tasks.editTask.timeInput).press('Enter');
+    await updateTimePicker(page, todaySelectors.tasks.editTask.timeInput, '08', '30', 'AM');
 
     await page.getByLabel(todaySelectors.tasks.editTask.end).click();
-    await page.locator(todaySelectors.tasks.editTask.timeInput).click();
-    await page.locator(todaySelectors.tasks.editTask.timeInput).fill('09:30');
-    await page.locator(todaySelectors.tasks.editTask.timeInput).press('Enter');
+    await updateTimePicker(page, todaySelectors.tasks.editTask.timeInput, '09', '30', 'AM');
 
     await page.getByRole('button', { name: todaySelectors.tasks.editTask.update }).click();
 
