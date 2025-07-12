@@ -1,0 +1,133 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "close": "Close",
+    "confirm": "Confirm",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "warning": "Warning",
+    "info": "Info",
+    "backup": "Backup",
+    "complete": "Complete",
+    "start": "Start",
+    "end": "End",
+    "duration": "Duration",
+    "project": "Project"
+  },
+  "navigation": {
+    "today": "Today",
+    "taskLog": "Task Log",
+    "reports": "Reports",
+    "settings": "Settings"
+  },
+  "app": {
+    "title": "Squirrel!",
+    "squirrelIcon": "Squirrel Icon"
+  },
+  "pages": {
+    "today": {
+      "todos": "Todos",
+      "tasks": "Tasks"
+    },
+    "reports": {
+      "title": "Daily Task Hours Breakdown",
+      "settings": "Settings",
+      "dateRange": "Date Range",
+      "groupBy": "Group By",
+      "update": "Update",
+      "name": "Name",
+      "project": "Project"
+    },
+    "settings": {
+      "backup": {
+        "title": "Backup",
+        "description": "Before clearing your browser cache, be sure to back up your data to prevent loss. Backing up protects against accidental deletion, system crashes, and software issues, ensuring you can easily restore your settings and preferences.",
+        "button": "Backup",
+        "askBeforeClosing": "Ask to backup before closing",
+        "askBeforeClosingDescription": "When enabled, you'll be prompted to create a backup before closing the application. This gives you control over when backups are created."
+      },
+      "restore": {
+        "title": "Restore from file",
+        "description": "Restoring from a file will erase all data currently stored in the application and replace it with the data from the file. Please note that this action cannot be undone.",
+        "button": "Restore from file"
+      },
+      "deleteData": {
+        "title": "Delete all data",
+        "description": "This action will delete all data stored in the local database (as there is no remote database in this local-first app). Please note that this action is irreversible.",
+        "button": "Delete all data"
+      }
+    },
+    "taskLog": {
+      "columns": {
+        "id": "ID",
+        "name": "Name",
+        "project": "Project",
+        "start": "Start",
+        "end": "End",
+        "duration": "Duration"
+      },
+      "editTask": "Edit Task",
+      "export": {
+        "allRows": "Export All Rows",
+        "pageRows": "Export Page Rows",
+        "selectedRows": "Export Selected Rows"
+      }
+    }
+  },
+  "tasks": {
+    "createPlaceholder": "What task are you focusing on right now?",
+    "project": "Project",
+    "task": "Task",
+    "description": "Description",
+    "date": "Date",
+    "duration": "Duration",
+    "start": "Start",
+    "stop": "Stop",
+    "complete": "Complete",
+    "cancel": "Cancel",
+    "name": "Name",
+    "namePlaceholder": "Checking Email",
+    "projectPlaceholder": "Project A",
+    "end": "End",
+    "update": "Update",
+    "nameValidation": "Name must have at least 2 letters",
+    "current": {
+      "title": "Current Task",
+      "startLabel": "Start",
+      "durationLabel": "Duration"
+    },
+    "completed": "Completed",
+    "projectLabel": "Project"
+  },
+  "todos": {
+    "title": "Todos",
+    "createPlaceholder": "Add a new todo...",
+    "markComplete": "Mark as complete",
+    "startTask": "Start task",
+    "name": "Name",
+    "project": "Project",
+    "namePlaceholder": "System Design",
+    "projectPlaceholder": "Project-A",
+    "addTodo": "Add Todo",
+    "nameValidation": "Name must include at least 2 characters"
+  },
+  "forms": {
+    "required": "This field is required",
+    "invalidEmail": "Please enter a valid email address",
+    "invalidDate": "Please enter a valid date",
+    "submit": "Submit",
+    "reset": "Reset"
+  },
+  "notifications": {
+    "backupEnabled": "Backup confirmation on close enabled",
+    "backupDisabled": "Backup confirmation on close disabled",
+    "dataRestored": "Data restored from file!",
+    "dataDeleted": "Data deleted!",
+    "importError": "Unable to import data!"
+  }
+} 

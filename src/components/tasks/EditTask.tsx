@@ -3,6 +3,7 @@ import { db, Task } from '../../database/database.ts';
 import { useForm } from '@mantine/form';
 import { DateTimePicker } from '@mantine/dates';
 import { timePickerFormat } from '../../date/format.ts';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
     close: () => void;
@@ -10,6 +11,7 @@ interface Props {
 }
 
 export function EditTask({ close, task }: Props) {
+    const { t } = useTranslation();
     const form = useForm({
         mode: 'uncontrolled',
         initialValues: {
@@ -19,7 +21,7 @@ export function EditTask({ close, task }: Props) {
             project: task.project,
         },
         validate: {
-            name: (value) => (value.length < 2 ? 'Name must have at least 2 letters' : null),
+            name: (value) => (value.length < 2 ? t('tasks.nameValidation') : null),
         },
     });
 
@@ -45,16 +47,16 @@ export function EditTask({ close, task }: Props) {
             <form onSubmit={form.onSubmit((values) => updateTask(values))}>
                 <TextInput
                     withAsterisk
-                    label="Name"
-                    placeholder="Checking Email"
+                    label={t('tasks.name')}
+                    placeholder={t('tasks.namePlaceholder')}
                     key={form.key('name')}
                     {...form.getInputProps('name')}
                     mb={'sm'}
                 />
 
                 <TextInput
-                    label="Project"
-                    placeholder="Project A"
+                    label={t('tasks.project')}
+                    placeholder={t('tasks.projectPlaceholder')}
                     key={form.key('project')}
                     {...form.getInputProps('project')}
                     mb={'sm'}
@@ -63,7 +65,7 @@ export function EditTask({ close, task }: Props) {
                 <DateTimePicker
                     dropdownType="modal"
                     withAsterisk
-                    label="Start"
+                    label={t('tasks.start')}
                     valueFormat={timePickerFormat}
                     key={form.key('start')}
                     {...form.getInputProps('start')}
@@ -73,7 +75,7 @@ export function EditTask({ close, task }: Props) {
                 <DateTimePicker
                     dropdownType="modal"
                     withAsterisk
-                    label="End"
+                    label={t('tasks.end')}
                     valueFormat={timePickerFormat}
                     key={form.key('end')}
                     {...form.getInputProps('end')}
@@ -81,14 +83,14 @@ export function EditTask({ close, task }: Props) {
 
                 <Group justify="space-between" mt="md">
                     <Button onClick={() => deleteTask(task.id)} variant={'subtle'} color={'red'}>
-                        Delete
+                        {t('common.delete')}
                     </Button>
                     <Group>
                         <Button variant={'subtle'} onClick={close}>
-                            Cancel
+                            {t('common.cancel')}
                         </Button>
                         <Button disabled={!form.isDirty()} type="submit">
-                            Update
+                            {t('tasks.update')}
                         </Button>
                     </Group>
                 </Group>

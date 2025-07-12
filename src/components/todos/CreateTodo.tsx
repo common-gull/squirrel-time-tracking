@@ -1,8 +1,10 @@
 import { Button, Card, Group, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { db } from '../../database/database.ts';
+import { useTranslation } from 'react-i18next';
 
 export function CreateTodo() {
+    const { t } = useTranslation();
     const form = useForm({
         mode: 'uncontrolled',
         initialValues: {
@@ -10,8 +12,7 @@ export function CreateTodo() {
             project: '',
         },
         validate: {
-            name: (value) =>
-                value.trim().length < 2 ? 'Name must include at least 2 characters' : null,
+            name: (value) => (value.trim().length < 2 ? t('todos.nameValidation') : null),
         },
         transformValues: ({ name, project }) => ({
             name: name.trim(),
@@ -29,21 +30,21 @@ export function CreateTodo() {
             <form onSubmit={form.onSubmit((values) => createTodo(values))}>
                 <Group align={'start'} grow>
                     <TextInput
-                        label={'Name'}
-                        placeholder="System Design"
+                        label={t('todos.name')}
+                        placeholder={t('todos.namePlaceholder')}
                         key={form.key('name')}
                         {...form.getInputProps('name')}
                     />
                     <TextInput
-                        label={'Project'}
-                        placeholder="Project-A"
+                        label={t('todos.project')}
+                        placeholder={t('todos.projectPlaceholder')}
                         key={form.key('project')}
                         {...form.getInputProps('project')}
                     />
                 </Group>
                 <Group justify={'end'}>
                     <Button mt={'sm'} disabled={!form.isDirty()} type="submit">
-                        Add Todo
+                        {t('todos.addTodo')}
                     </Button>
                 </Group>
             </form>
