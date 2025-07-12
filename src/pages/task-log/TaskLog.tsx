@@ -13,42 +13,45 @@ import { calculateDuration, formatDuration } from '../../date/duration.ts';
 import { download } from '../../download/download.ts';
 import Papa from 'papaparse';
 import { EditTask } from '../../components/tasks/EditTask.tsx';
+import { useTranslation } from 'react-i18next';
 
 interface FormattedTask extends Task, Record<string, string | number | undefined> {
     duration: string;
 }
 
-const columns: MRT_ColumnDef<FormattedTask>[] = [
-    {
-        accessorKey: 'id',
-        header: 'ID',
-        enableHiding: false,
-        enableEditing: false,
-    },
-    {
-        accessorKey: 'name',
-        header: 'Name',
-    },
-    {
-        accessorKey: 'project',
-        header: 'Project',
-    },
-    {
-        accessorKey: 'start',
-        header: 'Start',
-    },
-    {
-        accessorKey: 'end',
-        header: 'End',
-    },
-    {
-        accessorKey: 'duration',
-        header: 'Duration',
-        enableEditing: false,
-    },
-];
-
 export default function TaskLog() {
+    const { t } = useTranslation();
+
+    const columns: MRT_ColumnDef<FormattedTask>[] = [
+        {
+            accessorKey: 'id',
+            header: t('pages.taskLog.columns.id'),
+            enableHiding: false,
+            enableEditing: false,
+        },
+        {
+            accessorKey: 'name',
+            header: t('pages.taskLog.columns.name'),
+        },
+        {
+            accessorKey: 'project',
+            header: t('pages.taskLog.columns.project'),
+        },
+        {
+            accessorKey: 'start',
+            header: t('pages.taskLog.columns.start'),
+        },
+        {
+            accessorKey: 'end',
+            header: t('pages.taskLog.columns.end'),
+        },
+        {
+            accessorKey: 'duration',
+            header: t('pages.taskLog.columns.duration'),
+            enableEditing: false,
+        },
+    ];
+
     const tasks: FormattedTask[] = useLiveQuery(
         async () => {
             const tasks = await db.tasks.toArray();
@@ -96,7 +99,7 @@ export default function TaskLog() {
         enableFilterMatchHighlighting: false,
         renderEditRowModalContent: ({ row, table }) => (
             <Stack>
-                <Title order={5}>Edit Task</Title>
+                <Title order={5}>{t('pages.taskLog.editTask')}</Title>
                 <EditTask
                     close={() => table.setEditingRow(null)}
                     task={{
@@ -117,7 +120,7 @@ export default function TaskLog() {
                     leftSection={<IconDownload />}
                     variant="filled"
                 >
-                    Export All Rows
+                    {t('pages.taskLog.export.allRows')}
                 </Button>
                 <Button
                     disabled={table.getRowModel().rows.length === 0}
@@ -125,7 +128,7 @@ export default function TaskLog() {
                     leftSection={<IconDownload />}
                     variant="filled"
                 >
-                    Export Page Rows
+                    {t('pages.taskLog.export.pageRows')}
                 </Button>
                 <Button
                     disabled={!table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()}
@@ -133,7 +136,7 @@ export default function TaskLog() {
                     leftSection={<IconDownload />}
                     variant="filled"
                 >
-                    Export Selected Rows
+                    {t('pages.taskLog.export.selectedRows')}
                 </Button>
             </Group>
         ),

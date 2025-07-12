@@ -5,12 +5,14 @@ import { Task } from '../../database/database.ts';
 import { useState } from 'react';
 import { IconCheck } from '@tabler/icons-react';
 import { EditTask } from './EditTask.tsx';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
     tasks: Task[];
 }
 
 export function TaskList({ tasks }: Props) {
+    const { t } = useTranslation();
     const [opened, { open, close }] = useDisclosure(false, { onClose: handleClose });
     const [currentTask, setCurrentTask] = useState<Task>();
 
@@ -29,9 +31,9 @@ export function TaskList({ tasks }: Props) {
 
     return (
         <Card style={{ overflowX: 'hidden' }} withBorder mt={'sm'}>
-            <Text size={'l'}>Completed</Text>
+            <Text size={'l'}>{t('tasks.completed')}</Text>
 
-            <Modal opened={opened} onClose={close} title={'Edit Task'}>
+            <Modal opened={opened} onClose={close} title={t('pages.taskLog.editTask')}>
                 {currentTask && <EditTask close={close} task={currentTask} />}
             </Modal>
 
@@ -52,17 +54,18 @@ export function TaskList({ tasks }: Props) {
                         >
                             {task.project && (
                                 <Text c="dimmed" size="sm">
-                                    Project: {task.project}
+                                    {t('tasks.projectLabel')}: {task.project}
                                 </Text>
                             )}
                             <Text c="dimmed" size="lg">
-                                Start: {start.toLocaleTimeString()}
+                                {t('common.start')}: {start.toLocaleTimeString()}
                             </Text>
                             <Text c="dimmed" size="lg">
-                                End: {end.toLocaleTimeString()}
+                                {t('common.end')}: {end.toLocaleTimeString()}
                             </Text>
                             <Text size="xs" mt={4}>
-                                Duration: {formatDuration(calculateDuration(task.start, task.end))}
+                                {t('common.duration')}:{' '}
+                                {formatDuration(calculateDuration(task.start, task.end))}
                             </Text>
                         </Timeline.Item>
                     );

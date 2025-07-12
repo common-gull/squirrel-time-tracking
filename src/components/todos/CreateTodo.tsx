@@ -12,8 +12,7 @@ export function CreateTodo() {
             project: '',
         },
         validate: {
-            name: (value) =>
-                value.trim().length < 2 ? t('todos.nameValidation') : null,
+            name: (value) => (value.trim().length < 2 ? t('todos.nameValidation') : null),
         },
         transformValues: ({ name, project }) => ({
             name: name.trim(),

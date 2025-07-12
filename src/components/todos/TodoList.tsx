@@ -10,7 +10,7 @@ interface Props {
 
 export function TodoList({ onTodoStart, todos }: Props) {
     const { t } = useTranslation();
-    
+
     if (!todos.length) {
         return null;
     }

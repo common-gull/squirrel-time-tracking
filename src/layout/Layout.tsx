@@ -23,7 +23,7 @@ export function Layout() {
                     <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
                     <Flex align={'center'}>
                         <div>
-                            <img src={Squirrel} height={'28px'} alt="Squirrel Icon" />
+                            <img src={Squirrel} height={'28px'} alt={t('app.squirrelIcon')} />
                         </div>
                         <Text ml={'sm'}>{t('app.title')}</Text>
                     </Flex>

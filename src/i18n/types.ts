@@ -12,6 +12,12 @@ export interface TranslationKeys {
         success: string;
         warning: string;
         info: string;
+        backup: string;
+        complete: string;
+        start: string;
+        end: string;
+        duration: string;
+        project: string;
     };
     navigation: {
         today: string;
@@ -21,11 +27,56 @@ export interface TranslationKeys {
     };
     app: {
         title: string;
+        squirrelIcon: string;
     };
     pages: {
         today: {
             todos: string;
             tasks: string;
+        };
+        reports: {
+            title: string;
+            settings: string;
+            dateRange: string;
+            groupBy: string;
+            update: string;
+            name: string;
+            project: string;
+        };
+        settings: {
+            backup: {
+                title: string;
+                description: string;
+                button: string;
+                askBeforeClosing: string;
+                askBeforeClosingDescription: string;
+            };
+            restore: {
+                title: string;
+                description: string;
+                button: string;
+            };
+            deleteData: {
+                title: string;
+                description: string;
+                button: string;
+            };
+        };
+        taskLog: {
+            columns: {
+                id: string;
+                name: string;
+                project: string;
+                start: string;
+                end: string;
+                duration: string;
+            };
+            editTask: string;
+            export: {
+                allRows: string;
+                pageRows: string;
+                selectedRows: string;
+            };
         };
     };
     tasks: {
@@ -39,6 +90,19 @@ export interface TranslationKeys {
         stop: string;
         complete: string;
         cancel: string;
+        name: string;
+        namePlaceholder: string;
+        projectPlaceholder: string;
+        end: string;
+        update: string;
+        nameValidation: string;
+        current: {
+            title: string;
+            startLabel: string;
+            durationLabel: string;
+        };
+        completed: string;
+        projectLabel: string;
     };
     todos: {
         title: string;
@@ -58,5 +122,12 @@ export interface TranslationKeys {
         invalidDate: string;
         submit: string;
         reset: string;
+    };
+    notifications: {
+        backupEnabled: string;
+        backupDisabled: string;
+        dataRestored: string;
+        dataDeleted: string;
+        importError: string;
     };
 }

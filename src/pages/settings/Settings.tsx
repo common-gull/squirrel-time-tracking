@@ -3,16 +3,16 @@ import { db } from '../../database/database.ts';
 import { notifications } from '@mantine/notifications';
 import { download } from '../../download/download.ts';
 import { useLiveQuery } from 'dexie-react-hooks';
+import { useTranslation } from 'react-i18next';
 
 export default function Settings() {
+    const { t } = useTranslation();
     const backupOnCloseSetting = useLiveQuery(() => db.settings.get('backupOnClose'));
 
     async function toggleBackupOnClose(checked: boolean) {
         await db.settings.put({ id: 'backupOnClose', value: checked });
         notifications.show({
-            message: checked
-                ? 'Backup confirmation on close enabled'
-                : 'Backup confirmation on close disabled',
+            message: checked ? t('notifications.backupEnabled') : t('notifications.backupDisabled'),
         });
     }
 
@@ -30,14 +30,14 @@ export default function Settings() {
             // TODO - Import validation/data migrator
             const { settings, tasks, todos } = JSON.parse(e.target.result);
             if (!tasks) {
-                throw new Error('Unable to import data!');
+                throw new Error(t('notifications.importError'));
             }
             await clearDb();
             await db.settings.bulkAdd(Array.isArray(settings) ? settings : []);
             await db.tasks.bulkAdd(tasks);
             await db.todos.bulkAdd(todos);
             notifications.show({
-                message: 'Data restored from file!',
+                message: t('notifications.dataRestored'),
             });
         };
     }
@@ -58,54 +58,41 @@ export default function Settings() {
     async function deleteAllData() {
         await clearDb();
         notifications.show({
-            message: 'Data deleted!',
+            message: t('notifications.dataDeleted'),
         });
     }
 
     return (
         <Container>
             <Card mb={'sm'}>
-                <Title order={2}>Backup</Title>
-                <Text>
-                    Before clearing your browser cache, be sure to back up your data to prevent
-                    loss. Backing up protects against accidental deletion, system crashes, and
-                    software issues, ensuring you can easily restore your settings and preferences.
-                </Text>
+                <Title order={2}>{t('pages.settings.backup.title')}</Title>
+                <Text>{t('pages.settings.backup.description')}</Text>
                 <Button onClick={backup} mb="md">
-                    Backup
+                    {t('pages.settings.backup.button')}
                 </Button>
                 <Switch
-                    label="Ask to backup before closing"
+                    label={t('pages.settings.backup.askBeforeClosing')}
                     checked={backupOnCloseSetting?.value === true}
                     onChange={(event) => toggleBackupOnClose(event.currentTarget.checked)}
                     mb="md"
                 />
                 <Text size="sm" c="dimmed">
-                    When enabled, you'll be prompted to create a backup before closing the
-                    application. This gives you control over when backups are created.
+                    {t('pages.settings.backup.askBeforeClosingDescription')}
                 </Text>
             </Card>
 
             <Card mb={'sm'}>
-                <Title order={2}>Restore from file</Title>
-                <Text>
-                    Restoring from a file will erase all data currently stored in the application
-                    and replace it with the data from the file. Please note that this action cannot
-                    be undone.
-                </Text>
+                <Title order={2}>{t('pages.settings.restore.title')}</Title>
+                <Text>{t('pages.settings.restore.description')}</Text>
                 <FileButton onChange={importData} accept="application/json">
-                    {(props) => <Button {...props}>Restore from file</Button>}
+                    {(props) => <Button {...props}>{t('pages.settings.restore.button')}</Button>}
                 </FileButton>
             </Card>
 
             <Card mb={'sm'}>
-                <Title order={2}>Delete all data</Title>
-                <Text>
-                    This action will delete all data stored in the local database (as there is no
-                    remote database in this local-first app). Please note that this action is
-                    irreversible.
-                </Text>
-                <Button onClick={deleteAllData}>Delete all data</Button>
+                <Title order={2}>{t('pages.settings.deleteData.title')}</Title>
+                <Text>{t('pages.settings.deleteData.description')}</Text>
+                <Button onClick={deleteAllData}>{t('pages.settings.deleteData.button')}</Button>
             </Card>
         </Container>
     );
