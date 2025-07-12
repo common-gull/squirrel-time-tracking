@@ -16,8 +16,8 @@ export function EditTask({ close, task }: Props) {
         mode: 'uncontrolled',
         initialValues: {
             name: task.name,
-            start: new Date(task.start),
-            end: task.end && new Date(task.end),
+            start: task.start,
+            end: task.end || '',
             project: task.project,
         },
         validate: {
@@ -35,8 +35,8 @@ export function EditTask({ close, task }: Props) {
     async function updateTask(values: typeof form.values) {
         await db.tasks.update(task.id, {
             name: values.name,
-            start: values.start && values.start.toISOString(),
-            end: values.end && values.end.toISOString(),
+            start: values.start,
+            end: values.end || undefined,
             project: values.project,
         });
         close();
@@ -69,6 +69,9 @@ export function EditTask({ close, task }: Props) {
                     valueFormat={timePickerFormat}
                     key={form.key('start')}
                     {...form.getInputProps('start')}
+                    timePickerProps={{
+                        format: '12h',
+                    }}
                     mb={'sm'}
                 />
 
@@ -79,6 +82,9 @@ export function EditTask({ close, task }: Props) {
                     valueFormat={timePickerFormat}
                     key={form.key('end')}
                     {...form.getInputProps('end')}
+                    timePickerProps={{
+                        format: '12h',
+                    }}
                 />
 
                 <Group justify="space-between" mt="md">

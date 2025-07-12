@@ -1,12 +1,6 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db, Task } from '../../database/database.ts';
-import {
-    MantineReactTable,
-    type MRT_ColumnDef,
-    type MRT_Row,
-    useMantineReactTable,
-} from 'mantine-react-table';
-import { Button, Group, Stack, Title } from '@mantine/core';
+import { Button, Group, Stack, Modal } from '@mantine/core';
 import { IconDownload } from '@tabler/icons-react';
 import { isoStringToLocaleString } from '../../date/format.ts';
 import { calculateDuration, formatDuration } from '../../date/duration.ts';
@@ -14,6 +8,10 @@ import { download } from '../../download/download.ts';
 import Papa from 'papaparse';
 import { EditTask } from '../../components/tasks/EditTask.tsx';
 import { useTranslation } from 'react-i18next';
+import { MantineTable } from '../../components/table/MantineTable.tsx';
+import { ColumnDef, Row, useReactTable } from '@tanstack/react-table';
+import { useState } from 'react';
+import { useDisclosure } from '@mantine/hooks';
 
 interface FormattedTask extends Task, Record<string, string | number | undefined> {
     duration: string;
@@ -21,13 +19,14 @@ interface FormattedTask extends Task, Record<string, string | number | undefined
 
 export default function TaskLog() {
     const { t } = useTranslation();
+    const [editingTask, setEditingTask] = useState<FormattedTask | null>(null);
+    const [opened, { open, close }] = useDisclosure(false);
 
-    const columns: MRT_ColumnDef<FormattedTask>[] = [
+    const columns: ColumnDef<FormattedTask>[] = [
         {
             accessorKey: 'id',
             header: t('pages.taskLog.columns.id'),
-            enableHiding: false,
-            enableEditing: false,
+            enableHiding: true,
         },
         {
             accessorKey: 'name',
@@ -48,7 +47,7 @@ export default function TaskLog() {
         {
             accessorKey: 'duration',
             header: t('pages.taskLog.columns.duration'),
-            enableEditing: false,
+            enableSorting: true,
         },
     ];
 
@@ -70,7 +69,7 @@ export default function TaskLog() {
         [],
     );
 
-    const handleExportRows = (rows: MRT_Row<FormattedTask>[]) => {
+    const handleExportRows = (rows: Row<FormattedTask>[]) => {
         const rowData = rows.map((row) => row.original);
         const csv = Papa.unparse(rowData, {
             header: true,
@@ -80,67 +79,86 @@ export default function TaskLog() {
         download(`squirrel-export_${new Date().toISOString()}.csv`, csv);
     };
 
-    const table = useMantineReactTable({
-        columns,
-        data: tasks,
-        enableRowSelection: true,
-        enableEditing: true,
-        initialState: {
-            columnVisibility: {
-                id: false,
-            },
-        },
-        positionActionsColumn: 'last',
-        positionToolbarAlertBanner: 'bottom',
-        mantinePaginationProps: {
-            rowsPerPageOptions: ['10', '20', '50'],
-            withEdges: true,
-        },
-        enableFilterMatchHighlighting: false,
-        renderEditRowModalContent: ({ row, table }) => (
-            <Stack>
-                <Title order={5}>{t('pages.taskLog.editTask')}</Title>
-                <EditTask
-                    close={() => table.setEditingRow(null)}
-                    task={{
-                        id: row.getValue('id'),
-                        name: row.getValue('name'),
-                        start: row.getValue('start'),
-                        end: row.getValue('end'),
-                        project: row.getValue('project'),
-                    }}
-                />
-            </Stack>
-        ),
-        renderTopToolbarCustomActions: ({ table }) => (
-            <Group>
-                <Button
-                    disabled={table.getPrePaginationRowModel().rows.length === 0}
-                    onClick={() => handleExportRows(table.getPrePaginationRowModel().rows)}
-                    leftSection={<IconDownload />}
-                    variant="filled"
-                >
-                    {t('pages.taskLog.export.allRows')}
-                </Button>
-                <Button
-                    disabled={table.getRowModel().rows.length === 0}
-                    onClick={() => handleExportRows(table.getRowModel().rows)}
-                    leftSection={<IconDownload />}
-                    variant="filled"
-                >
-                    {t('pages.taskLog.export.pageRows')}
-                </Button>
-                <Button
-                    disabled={!table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()}
-                    onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
-                    leftSection={<IconDownload />}
-                    variant="filled"
-                >
-                    {t('pages.taskLog.export.selectedRows')}
-                </Button>
-            </Group>
-        ),
-    });
+    const handleRowEdit = (row: Row<FormattedTask>) => {
+        const task = row.original;
+        setEditingTask(task);
+        open();
+    };
 
-    return <MantineReactTable table={table} />;
+    const handleCloseEdit = () => {
+        setEditingTask(null);
+        close();
+    };
+
+    const renderTopToolbar = ({
+        table,
+        selectedRows,
+    }: {
+        table: ReturnType<typeof useReactTable<FormattedTask>>;
+        selectedRows: Row<FormattedTask>[];
+    }) => (
+        <Group>
+            <Button
+                disabled={table.getPrePaginationRowModel().rows.length === 0}
+                onClick={() => handleExportRows(table.getPrePaginationRowModel().rows)}
+                leftSection={<IconDownload />}
+                variant="filled"
+            >
+                {t('pages.taskLog.export.allRows')}
+            </Button>
+            <Button
+                disabled={table.getRowModel().rows.length === 0}
+                onClick={() => handleExportRows(table.getRowModel().rows)}
+                leftSection={<IconDownload />}
+                variant="filled"
+            >
+                {t('pages.taskLog.export.pageRows')}
+            </Button>
+            <Button
+                disabled={selectedRows.length === 0}
+                onClick={() => handleExportRows(selectedRows)}
+                leftSection={<IconDownload />}
+                variant="filled"
+            >
+                {t('pages.taskLog.export.selectedRows')}
+            </Button>
+        </Group>
+    );
+
+    return (
+        <>
+            <MantineTable
+                data={tasks}
+                columns={columns}
+                enableRowSelection={true}
+                enableEditing={true}
+                enableColumnVisibility={true}
+                enableFiltering={true}
+                enableSorting={true}
+                enablePagination={true}
+                initialColumnVisibility={{ id: false }}
+                pageSize={10}
+                onRowEdit={handleRowEdit}
+                renderTopToolbar={renderTopToolbar}
+                getRowId={(row) => row.id?.toString() || ''}
+            />
+
+            <Modal opened={opened} onClose={handleCloseEdit} title={t('pages.taskLog.editTask')}>
+                {editingTask && (
+                    <Stack>
+                        <EditTask
+                            close={handleCloseEdit}
+                            task={{
+                                id: editingTask.id,
+                                name: editingTask.name,
+                                start: editingTask.start,
+                                end: editingTask.end,
+                                project: editingTask.project,
+                            }}
+                        />
+                    </Stack>
+                )}
+            </Modal>
+        </>
+    );
 }
