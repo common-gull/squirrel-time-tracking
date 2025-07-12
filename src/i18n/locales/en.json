@@ -48,8 +48,8 @@
         "title": "Backup",
         "description": "Before clearing your browser cache, be sure to back up your data to prevent loss. Backing up protects against accidental deletion, system crashes, and software issues, ensuring you can easily restore your settings and preferences.",
         "button": "Backup",
-        "askBeforeClosing": "Ask to backup before closing",
-        "askBeforeClosingDescription": "When enabled, you'll be prompted to create a backup before closing the application. This gives you control over when backups are created."
+        "askBeforeClosing": "Warn before exiting",
+        "askBeforeClosingDescription": "When enabled, you'll get a browser warning before accidentally exiting the application. This reminds you to backup your data manually if needed."
       },
       "restore": {
         "title": "Restore from file",
@@ -124,8 +124,8 @@
     "reset": "Reset"
   },
   "notifications": {
-    "backupEnabled": "Backup confirmation on close enabled",
-    "backupDisabled": "Backup confirmation on close disabled",
+    "backupEnabled": "Exit warning enabled",
+    "backupDisabled": "Exit warning disabled",
     "dataRestored": "Data restored from file!",
     "dataDeleted": "Data deleted!",
     "importError": "Unable to import data!"

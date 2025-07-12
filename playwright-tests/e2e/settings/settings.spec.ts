@@ -64,23 +64,23 @@ async function checkTaskAndTodosDoNotExist(page: Page) {
 async function enableBackupConfirmation(page: Page) {
     await navigateTo(page, links.settings);
 
-    const switchLabel = page.locator('text=Ask to backup before closing');
+    const switchLabel = page.locator('text=Warn before exiting');
     await expect(switchLabel).toBeVisible();
 
     await switchLabel.click();
 
-    await expect(page.getByText('Backup confirmation on close enabled')).toBeVisible();
+    await expect(page.getByText('Exit warning enabled')).toBeVisible();
 }
 
 async function disableBackupConfirmation(page: Page) {
     await navigateTo(page, links.settings);
 
-    const switchLabel = page.locator('text=Ask to backup before closing');
+    const switchLabel = page.locator('text=Warn before exiting');
     await expect(switchLabel).toBeVisible();
 
     await switchLabel.click();
 
-    await expect(page.getByText('Backup confirmation on close disabled')).toBeVisible();
+    await expect(page.getByText('Exit warning disabled')).toBeVisible();
 }
 
 async function isBackupConfirmationEnabled(page: Page): Promise<boolean> {
@@ -167,7 +167,7 @@ test('Restore from file restores tasks and todos', async ({ page }) => {
     await checkTaskAndTodosExist(page);
 });
 
-test('Backup confirmation can toggled', async ({ page }) => {
+test('Exit warning can be toggled', async ({ page }) => {
     await setup(page);
 
     await enableBackupConfirmation(page);
@@ -178,9 +178,7 @@ test('Backup confirmation can toggled', async ({ page }) => {
     expect(isEnabled).toBe(false);
 });
 
-test('Backup confirmation modal appears when closing tab with setting enabled', async ({
-    page,
-}) => {
+test('Browser warning appears when closing tab with setting enabled', async ({ page }) => {
     await setup(page);
 
     await enableBackupConfirmation(page);
