@@ -40,8 +40,7 @@ All translation keys are defined in `src/i18n/locales/en.json`. The structure fo
 ### Adding New Translations
 
 1. Add the new key-value pair to `src/i18n/locales/en.json`
-2. Update the TypeScript interface in `src/i18n/types.ts` for type safety
-3. Use the translation in your component with `t('your.new.key')`
+2. Use the translation in your component with `t('your.new.key')`
 
 ### Adding New Languages
 

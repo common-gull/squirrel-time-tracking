@@ -1,12 +1,20 @@
 import { IconHome2, IconLogs, IconReport, IconSettings } from '@tabler/icons-react';
-import { lazy } from 'react';
+import { JSX, lazy } from 'react';
+import { ParseKeys } from 'i18next';
 
 const Reports = lazy(() => import('../pages/reports/Reports.tsx'));
 const Settings = lazy(() => import('../pages/settings/Settings'));
 const Today = lazy(() => import('../pages/today/Today'));
 const TaskLog = lazy(() => import('../pages/task-log/TaskLog.tsx'));
 
-export const routes = [
+interface Route {
+    index?: boolean;
+    path: string;
+    element: JSX.Element;
+    nav: { labelKey: ParseKeys<'ns1'>; icon: JSX.Element };
+}
+
+export const routes: Route[] = [
     {
         index: true,
         path: '/',
