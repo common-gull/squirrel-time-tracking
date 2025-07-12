@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Modal, TextInput, Button, Text, Group, Stack } from '@mantine/core';
+import { Modal, TextInput, Button, Text, Group, Stack, Alert } from '@mantine/core';
+import { IconLock, IconAlertCircle } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 
 interface RestorePasswordModalProps {
@@ -45,11 +46,12 @@ export const RestorePasswordModal = ({
             centered
             closeOnClickOutside={!loading}
             closeOnEscape={!loading}
+            size="md"
         >
             <Stack gap="md">
-                <Text size="sm">
+                <Alert icon={<IconLock size={16} />} color="blue" variant="light">
                     {t('pages.settings.backup.encrypted.restoreModal.description')}
-                </Text>
+                </Alert>
 
                 <TextInput
                     label={t('pages.settings.backup.encrypted.restoreModal.passwordLabel')}
@@ -60,7 +62,23 @@ export const RestorePasswordModal = ({
                     error={error}
                     disabled={loading}
                     data-autofocus
+                    aria-describedby="password-help"
+                    leftSection={<IconLock size={16} />}
                 />
+
+                {error && (
+                    <Alert icon={<IconAlertCircle size={16} />} color="red" variant="light">
+                        {error}
+                    </Alert>
+                )}
+
+                {loading && (
+                    <Alert color="blue" variant="light">
+                        <Text size="sm">
+                            {t('pages.settings.backup.encrypted.restoreModal.decryptingData')}
+                        </Text>
+                    </Alert>
+                )}
 
                 <Group justify="flex-end" gap="sm">
                     <Button variant="subtle" onClick={handleClose} disabled={loading}>
@@ -70,8 +88,11 @@ export const RestorePasswordModal = ({
                         onClick={handleSubmit}
                         disabled={!password.trim() || loading}
                         loading={loading}
+                        leftSection={loading ? undefined : <IconLock size={16} />}
                     >
-                        {t('pages.settings.backup.encrypted.restoreModal.restoreButton')}
+                        {loading
+                            ? t('pages.settings.backup.encrypted.restoreModal.decryptingData')
+                            : t('pages.settings.backup.encrypted.restoreModal.restoreButton')}
                     </Button>
                 </Group>
             </Stack>

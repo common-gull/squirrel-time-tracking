@@ -8,7 +8,11 @@ import {
     Title,
     Radio,
     Stack,
+    Group,
+    Badge,
+    Alert,
 } from '@mantine/core';
+import { IconShield, IconFile, IconInfoCircle } from '@tabler/icons-react';
 import { db } from '../../database/database.ts';
 import { notifications } from '@mantine/notifications';
 import { useLiveQuery } from 'dexie-react-hooks';
@@ -167,22 +171,62 @@ export default function Settings() {
                         value={backupType}
                         onChange={(value) => setBackupType(value as BackupType)}
                         label="Backup Type"
+                        aria-describedby="backup-type-description"
                     >
-                        <Stack gap="xs">
-                            <Radio value="plain" label={t('pages.settings.backup.type.plain')} />
+                        <Stack gap="sm">
+                            <Radio
+                                value="plain"
+                                label={
+                                    <Group gap="xs">
+                                        <IconFile size={16} />
+                                        <Text>{t('pages.settings.backup.type.plain')}</Text>
+                                        <Badge variant="light" color="blue" size="xs">
+                                            {t('pages.settings.backup.type.badges.standard')}
+                                        </Badge>
+                                    </Group>
+                                }
+                            />
                             <Radio
                                 value="encrypted"
-                                label={t('pages.settings.backup.type.encrypted')}
+                                label={
+                                    <Group gap="xs">
+                                        <IconShield size={16} />
+                                        <Text>{t('pages.settings.backup.type.encrypted')}</Text>
+                                        <Badge variant="light" color="green" size="xs">
+                                            {t('pages.settings.backup.type.badges.secure')}
+                                        </Badge>
+                                    </Group>
+                                }
                             />
                         </Stack>
                     </Radio.Group>
+
+                    <Alert
+                        icon={<IconInfoCircle size={16} />}
+                        color="blue"
+                        variant="light"
+                        id="backup-type-description"
+                    >
+                        {backupType === 'encrypted'
+                            ? t('pages.settings.backup.type.descriptions.encrypted')
+                            : t('pages.settings.backup.type.descriptions.plain')}
+                    </Alert>
 
                     <Button
                         onClick={handleBackupClick}
                         loading={backupLoading}
                         disabled={backupLoading}
+                        leftSection={
+                            backupType === 'encrypted' ? (
+                                <IconShield size={16} />
+                            ) : (
+                                <IconFile size={16} />
+                            )
+                        }
                     >
-                        {t('pages.settings.backup.button')}
+                        {backupLoading
+                            ? t('pages.settings.backup.creatingBackup')
+                            : t('pages.settings.backup.button')}
                     </Button>
                 </Stack>
 
