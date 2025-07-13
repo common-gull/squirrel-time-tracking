@@ -50,8 +50,65 @@
         "title": "Backup",
         "description": "Before clearing your browser cache, be sure to back up your data to prevent loss. Backing up protects against accidental deletion, system crashes, and software issues, ensuring you can easily restore your settings and preferences.",
         "button": "Backup",
+        "creatingBackup": "Creating backup...",
         "askBeforeClosing": "Warn before exiting",
-        "askBeforeClosingDescription": "When enabled, you'll get a browser warning before accidentally exiting the application. This reminds you to backup your data manually if needed."
+        "askBeforeClosingDescription": "When enabled, you'll get a browser warning before accidentally exiting the application. This reminds you to backup your data manually if needed.",
+        "type": {
+          "plain": "Standard Backup (JSON)",
+          "encrypted": "Encrypted Backup (Password Protected)",
+          "badges": {
+            "standard": "Standard",
+            "secure": "Secure"
+          },
+          "descriptions": {
+            "plain": "Standard backups are saved as plain JSON files. Anyone with access to the file can view your data.",
+            "encrypted": "Encrypted backups protect your data with password-based encryption. You will need the password to restore the backup."
+          }
+        },
+        "encrypted": {
+          "passwordModal": {
+            "title": "Set Backup Password",
+            "passwordLabel": "Password",
+            "confirmLabel": "Confirm Password",
+            "warning": "Important: This password cannot be recovered. Store it safely!",
+            "createButton": "Create Backup",
+            "passwordMismatch": "Passwords do not match",
+            "passwordTooShort": "Password must be at least 8 characters",
+            "passwordStrength": {
+              "label": "Password Strength",
+              "weak": "Weak",
+              "fair": "Fair",
+              "good": "Good",
+              "strong": "Strong"
+            },
+            "requirements": {
+              "title": "Password Requirements:",
+              "length": "At least 8 characters",
+              "uppercase": "At least one uppercase letter",
+              "lowercase": "At least one lowercase letter",
+              "number": "At least one number",
+              "special": "At least one special character"
+            },
+            "creatingBackup": "Creating encrypted backup...",
+            "processingData": "Processing data for encryption..."
+          },
+          "restoreModal": {
+            "title": "Encrypted Backup Detected",
+            "description": "This backup is password protected. Please enter the password:",
+            "passwordLabel": "Password",
+            "restoreButton": "Restore",
+            "decryptingData": "Decrypting backup data...",
+            "validatingPassword": "Validating password..."
+          },
+          "errors": {
+            "encryptionFailed": "Failed to create encrypted backup. Please try again.",
+            "decryptionFailed": "Invalid password or corrupted file.",
+            "invalidFormat": "Unrecognized backup file format.",
+            "passwordTooWeak": "Password is too weak. Please use a stronger password.",
+            "encryptionTimeout": "Encryption is taking longer than expected. Please wait...",
+            "decryptionTimeout": "Decryption is taking longer than expected. Please wait..."
+          }
+        }
       },
       "restore": {
         "title": "Restore from file",
@@ -128,6 +185,7 @@
   "notifications": {
     "backupEnabled": "Exit warning enabled",
     "backupDisabled": "Exit warning disabled",
+    "backupCreated": "Backup created successfully!",
     "dataRestored": "Data restored from file!",
     "dataDeleted": "Data deleted!",
     "importError": "Unable to import data!"

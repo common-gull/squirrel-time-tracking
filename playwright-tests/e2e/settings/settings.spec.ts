@@ -93,7 +93,7 @@ async function isBackupConfirmationEnabled(page: Page): Promise<boolean> {
 test('Delete all data removes all todos and tasks when clicked', async ({ page }) => {
     await setup(page);
     await page.getByRole('button', { name: settingsSelectors.main.deleteAllData }).click();
-    await expect(page.getByRole('alert')).toBeVisible();
+    await expect(page.getByText('Data deleted!')).toBeVisible();
     await navigateTo(page, links.today);
     await checkTaskAndTodosDoNotExist(page);
 });
