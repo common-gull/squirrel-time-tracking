@@ -24,7 +24,7 @@ export async function createEncryptedBackup(password: string): Promise<void> {
         const encryptedBackupFormat = createEncryptedBackupFormat(encryptionResult);
 
         const fileName = `squirrel-encrypted-backup_${new Date().toISOString()}.json`;
-        download(fileName, encryptedBackupFormat as Record<string, unknown>);
+        download(fileName, encryptedBackupFormat as unknown as Record<string, unknown>);
     } catch {
         throw new Error('Failed to create encrypted backup');
     }
