@@ -6,7 +6,7 @@ import * as settingsSelectors from '../../selectors/settings.selectors';
 import { join } from 'path';
 import { tmpdir } from 'os';
 import { readFile } from 'fs/promises';
-import { restoreFromFile } from '../../actions/settings.actions';
+import { restoreFromFile, selectTheme, getSelectedTheme } from '../../actions/settings.actions';
 import { links } from '../../selectors/nav.selectors';
 
 const startPath = '/#/settings';
@@ -190,4 +190,51 @@ test('Browser warning appears when closing tab with setting enabled', async ({ p
     });
 
     await page.goto('/');
+});
+
+test('Theme can be changed from auto to light', async ({ page }) => {
+    await page.goto(startPath);
+
+    // Default should be auto
+    expect(await getSelectedTheme(page)).toBe('auto');
+
+    // Change to light
+    await selectTheme(page, 'light');
+    expect(await getSelectedTheme(page)).toBe('light');
+
+    // Verify theme persists after page reload
+    await page.reload();
+    expect(await getSelectedTheme(page)).toBe('light');
+});
+
+test('Theme can be changed from light to dark', async ({ page }) => {
+    await page.goto(startPath);
+
+    // Set to light first
+    await selectTheme(page, 'light');
+    expect(await getSelectedTheme(page)).toBe('light');
+
+    // Change to dark
+    await selectTheme(page, 'dark');
+    expect(await getSelectedTheme(page)).toBe('dark');
+
+    // Verify theme persists after page reload
+    await page.reload();
+    expect(await getSelectedTheme(page)).toBe('dark');
+});
+
+test('Theme can be changed from dark to auto', async ({ page }) => {
+    await page.goto(startPath);
+
+    // Set to dark first
+    await selectTheme(page, 'dark');
+    expect(await getSelectedTheme(page)).toBe('dark');
+
+    // Change to auto
+    await selectTheme(page, 'auto');
+    expect(await getSelectedTheme(page)).toBe('auto');
+
+    // Verify theme persists after page reload
+    await page.reload();
+    expect(await getSelectedTheme(page)).toBe('auto');
 });

@@ -29,10 +29,12 @@ import {
     BackupType,
     EncryptedBackupFormat,
 } from '../../services/backup/encryption/types';
+import { useTheme, ThemePreference } from '../../hooks/useTheme';
 
 export default function Settings() {
     const { t } = useTranslation();
     const backupOnCloseSetting = useLiveQuery(() => db.settings.get('backupOnClose'));
+    const { themePreference, setThemePreference } = useTheme();
 
     const [backupType, setBackupType] = useState<BackupType>('plain');
     const [passwordModalOpened, setPasswordModalOpened] = useState(false);
@@ -162,6 +164,22 @@ export default function Settings() {
 
     return (
         <Container>
+            <Card mb={'sm'}>
+                <Title order={2}>{t('pages.settings.theme.title')}</Title>
+                <Text>{t('pages.settings.theme.description')}</Text>
+                <Radio.Group
+                    value={themePreference}
+                    onChange={(value) => setThemePreference(value as ThemePreference)}
+                    mt="md"
+                >
+                    <Stack gap="sm">
+                        <Radio value="auto" label={t('pages.settings.theme.auto')} />
+                        <Radio value="light" label={t('pages.settings.theme.light')} />
+                        <Radio value="dark" label={t('pages.settings.theme.dark')} />
+                    </Stack>
+                </Radio.Group>
+            </Card>
+
             <Card mb={'sm'}>
                 <Title order={2}>{t('pages.settings.backup.title')}</Title>
                 <Text>{t('pages.settings.backup.description')}</Text>
