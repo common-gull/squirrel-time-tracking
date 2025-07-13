@@ -119,6 +119,13 @@
         "title": "Delete all data",
         "description": "This action will delete all data stored in the local database (as there is no remote database in this local-first app). Please note that this action is irreversible.",
         "button": "Delete all data"
+      },
+      "theme": {
+        "title": "Theme",
+        "description": "Choose your preferred theme. Auto will match your system preference.",
+        "auto": "Auto (System)",
+        "light": "Light",
+        "dark": "Dark"
       }
     },
     "taskLog": {

@@ -5,19 +5,18 @@ import App from './App.tsx';
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
 import '@mantine/notifications/styles.css';
-import { MantineProvider } from '@mantine/core';
-import { mantineTheme } from './theme.ts';
 import { Notifications } from '@mantine/notifications';
 import { HashRouter } from 'react-router';
 import './i18n';
+import { ThemeProvider } from './components/ThemeProvider';
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
         <HashRouter>
-            <MantineProvider defaultColorScheme={'dark'} theme={mantineTheme}>
+            <ThemeProvider>
                 <Notifications />
                 <App />
-            </MantineProvider>
+            </ThemeProvider>
         </HashRouter>
     </StrictMode>,
 );
