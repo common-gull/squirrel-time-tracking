@@ -1,4 +1,9 @@
-import type { BackupData, EncryptionResult, DecryptionOptions } from './types';
+import type {
+    BackupData,
+    EncryptionResult,
+    DecryptionOptions,
+    EncryptedBackupFormat,
+} from './types';
 
 const ENCRYPTION_CONFIG = {
     algorithm: 'AES-256-GCM',
@@ -138,7 +143,9 @@ function getAppVersion(): string {
     return '1.0.0';
 }
 
-export function createEncryptedBackupFormat(encryptionResult: EncryptionResult): object {
+export function createEncryptedBackupFormat(
+    encryptionResult: EncryptionResult,
+): EncryptedBackupFormat {
     return {
         format: 'squirrel-encrypted-backup',
         version: '1.0',
