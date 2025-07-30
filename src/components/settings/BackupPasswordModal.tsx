@@ -43,7 +43,8 @@ export const BackupPasswordModal = ({
         if (pwd.length < 8) {
             return t('pages.settings.backup.encrypted.passwordModal.passwordTooShort');
         }
-        if (passwordStrength.score < 2) {
+        const currentStrength = calculatePasswordStrength(pwd);
+        if (currentStrength.score < 2) {
             return t('pages.settings.backup.encrypted.errors.passwordTooWeak');
         }
         return undefined;
@@ -97,8 +98,10 @@ export const BackupPasswordModal = ({
         onClose();
     };
 
-    const isValid =
-        password.length >= 8 && password === confirmPassword && passwordStrength.score >= 2;
+    const isValid = useMemo(() => {
+        const currentStrength = calculatePasswordStrength(password);
+        return password.length >= 8 && password === confirmPassword && currentStrength.score >= 2;
+    }, [password, confirmPassword]);
 
     return (
         <Modal

@@ -64,6 +64,8 @@ export const RestorePasswordModal = ({
                     data-autofocus
                     aria-describedby="password-help"
                     leftSection={<IconLock size={16} />}
+                    autoComplete="current-password"
+                    name="current-password"
                 />
 
                 {error && (
