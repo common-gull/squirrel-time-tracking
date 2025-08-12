@@ -99,8 +99,8 @@ export async function encryptBackupData(
 
         return {
             encryptedData: arrayBufferToBase64(encryptedData.buffer),
-            salt: arrayBufferToBase64(salt.buffer),
-            iv: arrayBufferToBase64(iv.buffer),
+            salt: arrayBufferToBase64(salt.buffer as ArrayBuffer),
+            iv: arrayBufferToBase64(iv.buffer as ArrayBuffer),
             authTag: arrayBufferToBase64(authTag.buffer),
         };
     } catch {
