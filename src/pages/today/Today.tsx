@@ -13,8 +13,9 @@ import { useTranslation } from 'react-i18next';
 export default function Today() {
     const { t } = useTranslation();
     const today = dayjs().format('YYYY-MM-DD');
+    const tomorrow = dayjs().add(1, 'day').format('YYYY-MM-DD');
     const tasks =
-        useLiveQuery(() => db.tasks.where('start').aboveOrEqual(today).sortBy('start')) || [];
+        useLiveQuery(() => db.tasks.where('start').between(today, tomorrow).sortBy('start')) || [];
     const todos = useLiveQuery(() => db.todos.toArray()) || [];
     const completedTasks = tasks.filter((task) => task.end !== undefined);
     const incompleteTask = tasks.filter((task) => task.end === undefined).pop();
