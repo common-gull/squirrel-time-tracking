@@ -36,7 +36,7 @@ async function deriveKey(password: string, salt: Uint8Array): Promise<CryptoKey>
     const keyMaterial = await crypto.subtle.deriveBits(
         {
             name: 'PBKDF2',
-            salt,
+            salt: salt.buffer as ArrayBuffer,
             iterations: ENCRYPTION_CONFIG.keyDerivation.iterations,
             hash: ENCRYPTION_CONFIG.keyDerivation.hash,
         },
@@ -84,7 +84,7 @@ export async function encryptBackupData(
         const encryptedBuffer = await crypto.subtle.encrypt(
             {
                 name: 'AES-GCM',
-                iv,
+                iv: iv.buffer as ArrayBuffer,
             },
             key,
             dataBuffer,
@@ -98,10 +98,10 @@ export async function encryptBackupData(
         const authTag = encryptedArray.slice(-authTagLength);
 
         return {
-            encryptedData: arrayBufferToBase64(encryptedData),
-            salt: arrayBufferToBase64(salt),
-            iv: arrayBufferToBase64(iv),
-            authTag: arrayBufferToBase64(authTag),
+            encryptedData: arrayBufferToBase64(encryptedData.buffer),
+            salt: arrayBufferToBase64(salt.buffer as ArrayBuffer),
+            iv: arrayBufferToBase64(iv.buffer as ArrayBuffer),
+            authTag: arrayBufferToBase64(authTag.buffer),
         };
     } catch {
         throw new Error('Encryption failed');
