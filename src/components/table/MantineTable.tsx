@@ -118,6 +118,7 @@ export const MantineTable = <TData,>({
         return cols;
     }, [columns, enableRowSelection, enableEditing, onRowEdit]);
 
+    // eslint-disable-next-line
     const table = useReactTable({
         data,
         columns: tableColumns,

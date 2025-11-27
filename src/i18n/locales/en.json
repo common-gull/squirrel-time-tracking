@@ -180,6 +180,8 @@
     "namePlaceholder": "System Design",
     "projectPlaceholder": "Project-A",
     "addTodo": "Add Todo",
+    "editTodo": "Edit Todo",
+    "update": "Update",
     "nameValidation": "Name must include at least 2 characters"
   },
   "forms": {
