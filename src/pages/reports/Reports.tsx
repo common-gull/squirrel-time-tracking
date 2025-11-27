@@ -5,20 +5,10 @@ import { notifications } from '@mantine/notifications';
 import dayjs from 'dayjs';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { Task } from '../../database/database.ts';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { calculateTaskHours } from '../../services/reports/reports.service.ts';
 import { TaskHours } from '../../services/reports/interfaces/task-hours.ts';
 import { useTranslation } from 'react-i18next';
-
-async function copyToClipboard(value: string) {
-    await navigator.clipboard.writeText(value);
-    notifications.show({
-        title: 'Copied!',
-        message: value,
-        color: 'green',
-        autoClose: 2000,
-    });
-}
 
 interface Settings {
     dateRange: [string, string];
@@ -27,6 +17,20 @@ interface Settings {
 
 export default function Reports() {
     const { t } = useTranslation();
+
+    const copyToClipboard = useCallback(
+        async (value: string) => {
+            await navigator.clipboard.writeText(value);
+            notifications.show({
+                title: t('notifications.copied'),
+                message: value,
+                color: 'green',
+                autoClose: 2000,
+            });
+        },
+        [t],
+    );
+
     const [settings, setSettings] = useState<Settings>({
         dateRange: [
             dayjs().subtract(7, 'd').startOf('day').format('YYYY-MM-DD'),

@@ -195,6 +195,7 @@
     "backupCreated": "Backup created successfully!",
     "dataRestored": "Data restored from file!",
     "dataDeleted": "Data deleted!",
-    "importError": "Unable to import data!"
+    "importError": "Unable to import data!",
+    "copied": "Copied!"
   }
 } 
