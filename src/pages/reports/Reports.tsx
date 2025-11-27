@@ -1,6 +1,7 @@
 import { Button, Card, Grid, NativeSelect, Table, Text } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
+import { notifications } from '@mantine/notifications';
 import dayjs from 'dayjs';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { Task } from '../../database/database.ts';
@@ -8,6 +9,16 @@ import { useState } from 'react';
 import { calculateTaskHours } from '../../services/reports/reports.service.ts';
 import { TaskHours } from '../../services/reports/interfaces/task-hours.ts';
 import { useTranslation } from 'react-i18next';
+
+async function copyToClipboard(value: string) {
+    await navigator.clipboard.writeText(value);
+    notifications.show({
+        title: 'Copied!',
+        message: value,
+        color: 'green',
+        autoClose: 2000,
+    });
+}
 
 interface Settings {
     dateRange: [string, string];
@@ -40,6 +51,8 @@ export default function Reports() {
         { data: {}, dates: [], dailyTotals: {}, grandTotal: 0 },
     );
 
+    const clickableStyle = { cursor: 'pointer' };
+
     const rows = Object.values(data).map((task) => (
         <Table.Tr key={task.name}>
             <Table.Td>{task.name}</Table.Td>
@@ -47,7 +60,11 @@ export default function Reports() {
                 const total = task.totals[date] ?? 0;
                 const fixedTotal = total.toFixed(2);
                 return (
-                    <Table.Td key={date}>
+                    <Table.Td
+                        key={date}
+                        style={clickableStyle}
+                        onClick={() => copyToClipboard(fixedTotal)}
+                    >
                         <Text c={fixedTotal === '0.00' ? 'dimmed' : ''}>{fixedTotal}</Text>
                     </Table.Td>
                 );
@@ -62,7 +79,11 @@ export default function Reports() {
                 const total = dailyTotals[date] ?? 0;
                 const fixedTotal = total.toFixed(2);
                 return (
-                    <Table.Td key={date} style={{ fontWeight: 'bold' }}>
+                    <Table.Td
+                        key={date}
+                        style={{ fontWeight: 'bold', cursor: 'pointer' }}
+                        onClick={() => copyToClipboard(fixedTotal)}
+                    >
                         <Text c={fixedTotal === '0.00' ? 'dimmed' : ''}>{fixedTotal}</Text>
                     </Table.Td>
                 );
@@ -96,7 +117,12 @@ export default function Reports() {
                             </Table.Tbody>
                         </Table>
                     </Table.ScrollContainer>
-                    <Text size="lg" mt="md" style={{ fontWeight: 'bold' }}>
+                    <Text
+                        size="lg"
+                        mt="md"
+                        style={{ fontWeight: 'bold', cursor: 'pointer', display: 'inline-block' }}
+                        onClick={() => copyToClipboard(grandTotal.toFixed(2))}
+                    >
                         {t('pages.reports.totalHours')}: {grandTotal.toFixed(2)}
                     </Text>
                 </Card>
