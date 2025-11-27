@@ -6,7 +6,6 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import dayjs from 'dayjs';
 import { CreateTodo } from '../../components/todos/CreateTodo.tsx';
 import { CreateTask } from '../../components/tasks/CreateTask.tsx';
-import { useEffect, useState } from 'react';
 import { TodoList } from '../../components/todos/TodoList.tsx';
 import { useTranslation } from 'react-i18next';
 
@@ -15,31 +14,23 @@ export default function Today() {
     const today = dayjs().format('YYYY-MM-DD');
     const tomorrow = dayjs().add(1, 'day').format('YYYY-MM-DD');
     const tasks =
-        useLiveQuery(() => db.tasks.where('start').between(today, tomorrow).sortBy('start')) || [];
-    const todos = useLiveQuery(() => db.todos.toArray()) || [];
+        useLiveQuery(() => db.tasks.where('start').between(today, tomorrow).sortBy('start')) ?? [];
+    const todos = useLiveQuery(() => db.todos.toArray()) ?? [];
     const completedTasks = tasks.filter((task) => task.end !== undefined);
-    const incompleteTask = tasks.filter((task) => task.end === undefined).pop();
-    const [currentTask, setCurrentTask] = useState<Task>();
+    const currentTask = tasks.find((task) => task.end === undefined);
 
     async function cancelTask(task: Task) {
         await db.tasks.delete(task.id);
-        setCurrentTask(undefined);
     }
 
-    async function completeIncompleteTask() {
-        if (incompleteTask) {
-            await db.tasks.update(incompleteTask.id, { end: new Date().toISOString() });
+    async function completeCurrentTask() {
+        if (currentTask) {
+            await db.tasks.update(currentTask.id, { end: new Date().toISOString() });
         }
     }
 
-    async function markCurrentTaskComplete() {
-        await completeIncompleteTask();
-        setCurrentTask(undefined);
-    }
-
-    async function handleTaskCreated(task: Task) {
-        await completeIncompleteTask();
-        setCurrentTask(task);
+    async function handleTaskCreated() {
+        await completeCurrentTask();
     }
 
     async function handleTodoStart(todo: Todo) {
@@ -51,15 +42,9 @@ export default function Today() {
             project: todo.project,
             start: new Date().toISOString(),
         };
-        const id = await db.tasks.add(newTask);
-        await handleTaskCreated({ id, ...newTask });
+        await db.tasks.add(newTask);
+        await completeCurrentTask();
     }
-
-    useEffect(() => {
-        if (incompleteTask) {
-            setCurrentTask(incompleteTask);
-        }
-    }, [incompleteTask]);
 
     return (
         <div>
@@ -83,7 +68,7 @@ export default function Today() {
                         {currentTask && (
                             <CurrentTask
                                 cancel={cancelTask}
-                                complete={markCurrentTaskComplete}
+                                complete={completeCurrentTask}
                                 task={currentTask}
                             />
                         )}

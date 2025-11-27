@@ -1,6 +1,6 @@
 import { Task } from '../../database/database.ts';
 import { Button, Card, Group, Text } from '@mantine/core';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { calculateDuration, formatDuration } from '../../date/duration.ts';
 import { isoStringToLocaleTimeString } from '../../date/format.ts';
 import { useTranslation } from 'react-i18next';
@@ -13,19 +13,18 @@ interface Props {
 
 export function CurrentTask({ cancel, complete, task }: Props) {
     const { t } = useTranslation();
-    const [duration, setDuration] = useState<string>('');
-
-    const updateDuration = useCallback(() => {
-        setDuration(formatDuration(calculateDuration(task.start)));
-    }, [task.start]);
+    const [duration, setDuration] = useState<string>(() =>
+        formatDuration(calculateDuration(task.start)),
+    );
 
     useEffect(() => {
-        updateDuration();
-        const timer = setInterval(updateDuration, 1000);
+        const timer = setInterval(() => {
+            setDuration(formatDuration(calculateDuration(task.start)));
+        }, 1000);
         return () => {
             clearInterval(timer);
         };
-    }, [updateDuration]);
+    }, [task.start]);
 
     return (
         <Card p="xl" ta={'center'} withBorder mt={'sm'}>
