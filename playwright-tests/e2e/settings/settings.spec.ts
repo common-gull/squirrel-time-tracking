@@ -64,10 +64,10 @@ async function checkTaskAndTodosDoNotExist(page: Page) {
 async function enableBackupConfirmation(page: Page) {
     await navigateTo(page, links.settings);
 
-    const switchLabel = page.locator('text=Warn before exiting');
-    await expect(switchLabel).toBeVisible();
+    const exitWarningSwitch = page.getByRole('switch', { name: 'Warn before exiting' });
+    await expect(exitWarningSwitch).toBeVisible();
 
-    await switchLabel.click();
+    await exitWarningSwitch.click();
 
     await expect(page.getByText('Exit warning enabled')).toBeVisible();
 }
@@ -75,10 +75,10 @@ async function enableBackupConfirmation(page: Page) {
 async function disableBackupConfirmation(page: Page) {
     await navigateTo(page, links.settings);
 
-    const switchLabel = page.locator('text=Warn before exiting');
-    await expect(switchLabel).toBeVisible();
+    const exitWarningSwitch = page.getByRole('switch', { name: 'Warn before exiting' });
+    await expect(exitWarningSwitch).toBeVisible();
 
-    await switchLabel.click();
+    await exitWarningSwitch.click();
 
     await expect(page.getByText('Exit warning disabled')).toBeVisible();
 }
